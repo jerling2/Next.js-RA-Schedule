@@ -73,7 +73,7 @@ export default function WeekSelector({ weekNumber, minPriority, maxPriority }: W
                                         maxPriority={maxPriority}
                                         value={shiftPriorities[blockIdx]} 
                                         onChange={handleShiftPriorityChange}
-                                    />
+                                        specialKey="metaKey"/>
                                 </div>
                             );
                         }));

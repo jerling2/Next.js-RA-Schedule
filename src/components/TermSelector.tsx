@@ -90,7 +90,8 @@ export default function TermSelctor(
                                         minPriority={minPriority} 
                                         maxPriority={maxPriority} 
                                         value={shiftPriorities[blockIdx]} 
-                                        onChange={handleShiftPriorityChange}/>
+                                        onChange={handleShiftPriorityChange}
+                                        specialKey="metaKey"/>
                                 </div>
                             );
                         }));
