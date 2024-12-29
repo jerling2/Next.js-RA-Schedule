@@ -11,8 +11,7 @@ interface WeekSelectorProps {
 export default function WeekSelector({ weekNumber, minPriority, maxPriority }: WeekSelectorProps) {
     const numRows = 3;
     const numCols = 8;
-    const midPriority = Math.ceil((minPriority + maxPriority) / 2);
-    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(14).fill(midPriority));
+    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(14).fill(-1));
 
     const handleShiftPriorityChange = (index: number, value: number) => {
         const updatedShiftPriorities = [...shiftPriorities];

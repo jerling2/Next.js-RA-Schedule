@@ -1,4 +1,5 @@
-import { MouseEvent } from 'react';
+"use client";
+import { useEffect, useState, MouseEvent } from 'react';
 
 const LEFT_CLICK = 0;
 const RIGHT_CLICK = 2;
@@ -19,10 +20,14 @@ export default function PriorityBox ({
             onChange(index, minPriority);
         } else if (e.shiftKey && e.button === RIGHT_CLICK && value != maxPriority) {
             onChange(index, maxPriority);
-        } else if (e.button === LEFT_CLICK && value > minPriority) {
+        } else if (e.button === LEFT_CLICK && value !== -1 && value > minPriority) {
             onChange(index, value - 1);
-        } else if (e.button == RIGHT_CLICK && value < maxPriority) {
+        } else if (e.button === RIGHT_CLICK && value !== -1 && value < maxPriority) {
             onChange(index, value + 1);
+        } else if (e.button === LEFT_CLICK && value === -1) {
+            onChange(index, maxPriority);
+        } else if (e.button === RIGHT_CLICK && value === -1) {
+            onChange(index, minPriority);
         }
     }
 
@@ -31,7 +36,7 @@ export default function PriorityBox ({
             className="bg-[#D9D9D9] cursor-pointer"
             onMouseDown={ handleClick }>
             <span className="select-none">
-                {value}
+                {value === -1 ? '\u200B' : value}
             </span>
         </div>
         );

@@ -14,9 +14,8 @@ export default function TermSelctor(
 
     const numLanes = Math.ceil(numWeeks / weeksPerRow);
     const numRoleRows = numLanes * 2;
-    const midPriority = Math.ceil((maxPriority + minPriority) / 2);
     
-    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(numWeeks * 2).fill(midPriority));
+    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(numWeeks * 2).fill(-1));
 
     const handleShiftPriorityChange = (index: number, value: number) => {
         const updatedShiftPriorities = [...shiftPriorities];
