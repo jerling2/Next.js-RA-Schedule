@@ -1,29 +1,18 @@
-/**
- * WeekSelector component displays a weekly schedule with checkboxes for primary and secondary tasks.
- * The component dynamically generates the days of the week and includes checkboxes for each day.
- * It allows users to check the boxes for "primary" and "secondary" tasks for each day of the week.
- *
- * @param {Object} props - The properties passed to the component.
- * @param {number} props.weekNumber - The week number to be displayed in the component.
- * 
- * @returns {JSX.Element} The rendered WeekSelector component.
- */
 "use client";
-import { useState, MouseEvent } from "react"
+import { useState, MouseEvent, CSSProperties } from "react"
 import PriorityBox from "./PriorityBox";
-
 
 interface WeekSelectorProps {
     weekNumber: number;
+    minPriority: number;
+    maxPriority: number;
 }
 
-const MIN_PRIORITY = 1; // This is actually the 'highest' priority. Think "golf" score.
-const MAX_PRIORITY = 7; // this is actually the 'lowest' priority. Think "golf" score.
-const MID_PRIORITY = (MIN_PRIORITY + MAX_PRIORITY) / 2;
-
-export default function WeekSelector({ weekNumber }: WeekSelectorProps) {
-
-    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(14).fill(MID_PRIORITY));
+export default function WeekSelector({ weekNumber, minPriority, maxPriority }: WeekSelectorProps) {
+    const numRows = 3;
+    const numCols = 8;
+    const midPriority = Math.ceil((minPriority + maxPriority) / 2);
+    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(14).fill(midPriority));
 
     const handleShiftPriorityChange = (index: number, value: number) => {
         const updatedShiftPriorities = [...shiftPriorities];
@@ -33,58 +22,64 @@ export default function WeekSelector({ weekNumber }: WeekSelectorProps) {
     };
 
     return (
-        <div className="flex justify-center select-none">
+        <div 
+        style={{'--cols': numCols} as CSSProperties}
+        className="flex justify-center select-none">
             <div className="w-4/5 max-w-4xl bg-white text-black flex flex-col p-4">
+               
+                {/* Table Title */}
                 <div className="flex flex-row text-2xl mb-5 justify-center">
                     Week {weekNumber}
                 </div>
-                <div className="relative grid grid-cols-8 place-items-center text-center">
-                    <div className="absolute -top-[0.5px] left-0 right-0 place-self-stretch border-t border-slate-400" style={{ gridRow: '1', gridColumn: '1 / span 8' }}></div>
-                    <div className="absolute -top-[0.5px] left-0 right-0 place-self-stretch border-t border-slate-400" style={{ gridRow: '2', gridColumn: '1 / span 8' }}></div>
-                    <div className="absolute -top-[0.5px] left-0 right-0 place-self-stretch border-t border-slate-400" style={{ gridRow: '3', gridColumn: '1 / span 8' }}></div>
-                    <div className="absolute -top-[0.5px] left-0 right-0 place-self-stretch border-t border-slate-400" style={{ gridRow: '4', gridColumn: '1 / span 8' }}></div>
+
+                <div className="relative grid grid-cols-[var(--cols)] place-items-center text-center">
+                    {/* Gridlines */}
+                    {[...Array(numRows)].map((_, index) => (
+                        <div
+                            key={index}
+                            className="absolute -top-[0.5px] left-0 right-0 place-self-stretch border-t border-slate-400"
+                            style={{ gridRow: `${index + 2}`, gridColumn: '1 / span var(--cols)' }}
+                        />
+                    ))}
+
+                    {/* Table headers */}
                     {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day, index) => (
                         <div key={day} style={{ gridRow: '1', gridColumn: `${index + 2}` }}>
                             {day}
                         </div>
                     ))}
 
+                    {/* Primary and Secondary labels */}
                     <div className="place-self-stretch text-left" style={{ gridRow: '2', gridColumn: '1' }}>
                         Primary
                     </div>
-                    {[...Array(7)].map((_, index) => (
-                        <div 
-                            key={index}
-                            onContextMenu={(e: MouseEvent) => e.preventDefault()} // Prevent menu from opening when user right clicks.
-                            className="h-full aspect-square"
-                            style={{ gridRow: '2', gridColumn: `${index + 2}`}}>
-                            <PriorityBox 
-                                index={index} 
-                                minPriority={MIN_PRIORITY}
-                                maxPriority={MAX_PRIORITY}
-                                value={shiftPriorities[index]} 
-                                onChange={handleShiftPriorityChange}
-                            />
-                        </div>
-                    ))}
                     <div className="place-self-stretch text-left" style={{ gridRow: '3', gridColumn: '1' }}>
                         Secondary
                     </div>
-                    {[...Array(7)].map((_, index) => (
-                        <div 
-                        key={index}
-                        onContextMenu={(e: MouseEvent) => e.preventDefault()} // Prevent menu from opening when user right clicks.
-                        className="h-full aspect-square"
-                        style={{ gridRow: '3', gridColumn: `${index + 2}`}}>
-                        <PriorityBox 
-                            index={index + 7} 
-                            minPriority={MIN_PRIORITY}
-                            maxPriority={MAX_PRIORITY}
-                            value={shiftPriorities[index + 7]} 
-                            onChange={handleShiftPriorityChange}
-                        />
-                    </div>
-                    ))}
+                    
+                    {/* Priority boxes */}
+                    {[...Array(2)].map((_, rowIter) => {
+                        return ([...Array(7)].map((_, colIter) => {
+                            const rowNum = `${rowIter + 2}`;
+                            const colNum = `${colIter + 2}`;
+                            const blockIdx = rowIter * 7 + colIter;
+                            return (
+                                <div
+                                    key={blockIdx}
+                                    onContextMenu={(e: MouseEvent) => e.preventDefault()} // Prevent menu from opening when user right clicks.
+                                    className="h-full aspect-square"
+                                    style={{ gridRow: rowNum, gridColumn: colNum }}>
+                                    <PriorityBox 
+                                        index={blockIdx} 
+                                        minPriority={minPriority}
+                                        maxPriority={maxPriority}
+                                        value={shiftPriorities[blockIdx]} 
+                                        onChange={handleShiftPriorityChange}
+                                    />
+                                </div>
+                            );
+                        }));
+                    })}
                 </div>
             </div>
         </div>

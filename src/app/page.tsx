@@ -7,7 +7,7 @@ export default function Home() {
     <div className="flex flex-col gap-2">
       <TermSelctor />
       {[...Array(11)].map((_, index) => (
-        <WeekSelector key={index} weekNumber={index + 1} />
+        <WeekSelector key={index} weekNumber={index + 1} minPriority={1} maxPriority={7} />
       ))}
     </div>
   );
