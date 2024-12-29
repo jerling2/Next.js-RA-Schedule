@@ -17,7 +17,6 @@ export default function WeekSelector({ weekNumber, minPriority, maxPriority }: W
     const handleShiftPriorityChange = (index: number, value: number) => {
         const updatedShiftPriorities = [...shiftPriorities];
         updatedShiftPriorities[index] = value;
-        console.log(updatedShiftPriorities);
         setShiftPriority(updatedShiftPriorities);
     };
 

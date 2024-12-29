@@ -21,7 +21,6 @@ export default function TermSelctor(
     const handleShiftPriorityChange = (index: number, value: number) => {
         const updatedShiftPriorities = [...shiftPriorities];
         updatedShiftPriorities[index] = value;
-        console.log(updatedShiftPriorities);
         setShiftPriority(updatedShiftPriorities);
     };
 
@@ -97,7 +96,7 @@ export default function TermSelctor(
                             );
                         }));
                     })}
-                    
+
                 </div>
             </div>
         </div>
