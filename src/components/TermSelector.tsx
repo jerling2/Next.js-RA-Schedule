@@ -2,20 +2,21 @@
 import { CSSProperties, useState, MouseEvent } from "react";
 import PriorityBox from "./PriorityBox";
 
+interface TermSelectorProps {
+    numWeeks: number,
+    weeksPerRow: number,
+    minPriority: number,
+    maxPriority: number
+};
 
-const NUM_WEEKS = 11;
-const WEEKS_PER_ROW = 5;
-const NUM_LANES = Math.ceil(NUM_WEEKS / WEEKS_PER_ROW);
-const NUM_ROLE_ROWS = NUM_LANES * 2;
+export default function TermSelctor(
+    { numWeeks, weeksPerRow, minPriority, maxPriority }: TermSelectorProps) {
 
-
-const MIN_PRIORITY = 1
-const MAX_PRIORITY = NUM_WEEKS;
-const MID_PRIORITY = Math.ceil((MAX_PRIORITY + MIN_PRIORITY) / 2);
-
-
-export default function TermSelctor() {
-    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(NUM_WEEKS * 2).fill(MID_PRIORITY));
+    const numLanes = Math.ceil(numWeeks / weeksPerRow);
+    const numRoleRows = numLanes * 2;
+    const midPriority = Math.ceil((maxPriority + minPriority) / 2);
+    
+    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(numWeeks * 2).fill(midPriority));
 
     const handleShiftPriorityChange = (index: number, value: number) => {
         const updatedShiftPriorities = [...shiftPriorities];
@@ -26,23 +27,30 @@ export default function TermSelctor() {
 
     return (
         <div 
-        style={{ "--cols": WEEKS_PER_ROW} as CSSProperties}
+        style={{ "--cols": weeksPerRow} as CSSProperties}
         className="flex justify-center select-none">
             <div className="w-4/5 max-w-4xl text-black flex flex-col p-4">
+                
+                {/* Table Title */}
                 <div className="flex flex-row text-2xl mb-5 justify-center">
                     Term Priority
                 </div>
+               
                 <div className="relative grid grid-cols-(var(--cols)) place-items-center text-center">
-                    {[...Array(NUM_ROLE_ROWS + NUM_LANES)].map((_, index) => (
+                
+                    {/* Gridlines */}
+                    {[...Array(numRoleRows + numLanes)].map((_, index) => (
                         <div 
                             key={index}
                             className="absolute -top-[0.5px] left-0 right-0 place-self-stretch border-t border-slate-400"
                             style={{ gridRow: `${index + 2}`, gridColumn: '1 / span (var(--cols))' }} 
                         />
                     ))}
-                    {[...Array(NUM_LANES)].map((_, index) => {
-                        const startWeek = index * WEEKS_PER_ROW + 1;
-                        const weeksInRow = Math.min(NUM_WEEKS - (index * WEEKS_PER_ROW), WEEKS_PER_ROW)
+                  
+                    {/* Table Headers */}
+                    {[...Array(numLanes)].map((_, index) => {
+                        const startWeek = index * weeksPerRow + 1;
+                        const weeksInRow = Math.min(numWeeks - (index * weeksPerRow), weeksPerRow)
                         const rowNum = `${index * 3 + 1}`;
                         return ([...Array(weeksInRow)].map((_, index) => (
                             <div 
@@ -53,7 +61,9 @@ export default function TermSelctor() {
                             </div>    
                         )));
                     })}
-                    {[...Array(NUM_ROLE_ROWS)].map((_, index) => {
+                    
+                    {/* Primary & Secondary Labels */}
+                    {[...Array(numRoleRows)].map((_, index) => {
                         const rowNum = `${index + 2 + Math.floor(index / 2)}`;
                         return (
                             <div 
@@ -64,11 +74,13 @@ export default function TermSelctor() {
                             </div>
                         );
                     })}
+
+                    {/* Priority Boxes */}
                     {[...Array(2)].map((_, offset) => {
-                        return ([...Array(NUM_WEEKS)].map((_, index) => {
-                            const rowNum = Math.floor(index / WEEKS_PER_ROW) * 3 + (offset + 2);
-                            const colNum = index % WEEKS_PER_ROW + 2;
-                            const blockIdx = offset * NUM_WEEKS + index;
+                        return ([...Array(numWeeks)].map((_, index) => {
+                            const rowNum = Math.floor(index / weeksPerRow) * 3 + (offset + 2);
+                            const colNum = index % weeksPerRow + 2;
+                            const blockIdx = offset * numWeeks + index;
                             return (
                                 <div 
                                     key={blockIdx}
@@ -77,14 +89,15 @@ export default function TermSelctor() {
                                     style={{ gridRow: rowNum, gridColumn: colNum}}>
                                     <PriorityBox 
                                         index={blockIdx} 
-                                        minPriority={MIN_PRIORITY} 
-                                        maxPriority={MAX_PRIORITY} 
+                                        minPriority={minPriority} 
+                                        maxPriority={maxPriority} 
                                         value={shiftPriorities[blockIdx]} 
                                         onChange={handleShiftPriorityChange}/>
                                 </div>
                             );
                         }));
                     })}
+                    
                 </div>
             </div>
         </div>
