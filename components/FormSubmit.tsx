@@ -52,7 +52,7 @@ function Submit({ onClick }: SubmitProps) {
 
 
 interface FormSubmitProps {
-    onFormSubmit: () => void;
+    onFormSubmit: (user: string, uoid: string) => void;
     formError: string;
 };
 
@@ -62,15 +62,15 @@ export default function FormSubmit({ onFormSubmit, formError }: FormSubmitProps)
     const regexName = RegExp(regexNameString);
     const regexUoid = RegExp(regexUoidString);
 
-    const [values, setValues] = useState<{[key: string]: string}>({
-        'name': 'John Doe',
-        'uoid': '951917289'
+    const [user, setUser] = useState<{[key: string]: string}>({
+        'name': '',
+        'uoid': ''
     });
 
     const [shakes, setShakes] = useState<boolean[]>(Array(2).fill(false));
 
     const textInputHandler = (key: string, value: string) => {
-        setValues((prev) => ({
+        setUser((prev) => ({
             ...prev,
             [key]: value,
         }));
@@ -87,11 +87,11 @@ export default function FormSubmit({ onFormSubmit, formError }: FormSubmitProps)
     }
 
     const submitHandler = () => {
-        const updatedShakes = [!regexName.test(values['name']), !regexUoid.test(values['uoid'])]
+        const updatedShakes = [!regexName.test(user['name']), !regexUoid.test(user['uoid'])]
         if (updatedShakes.includes(true)) {
             setShakes(updatedShakes);
         } else {
-            onFormSubmit();
+            onFormSubmit(user['name'], user['uoid']);
         }
     }
 
@@ -99,8 +99,8 @@ export default function FormSubmit({ onFormSubmit, formError }: FormSubmitProps)
         <div className="flex flex-row justify-center">
             <div className="w-4/5 max-w-4xl flex flex-col place-items-center p-4">
                 <div className="w-1/4 flex flex-col gap-y-4 place-items-center">
-                    <TextInput label={"Name"} placeholder={"John Doe"} value={values['name']} regExp={regexNameString} causeShake={shakes[0]} onChange={(value) => textInputHandler('name', value)} onAnimationEnd={(event) => handleAnimationEnd(0, event)} />
-                    <TextInput label={"UOID"} placeholder={"951234567"} value={values['uoid']} regExp={regexUoidString} causeShake={shakes[1]} onChange={(value) => textInputHandler('uoid', value)} onAnimationEnd={(event) => handleAnimationEnd(1, event)} />
+                    <TextInput label={"Name"} placeholder={"John Doe"} value={user['name']} regExp={regexNameString} causeShake={shakes[0]} onChange={(value) => textInputHandler('name', value)} onAnimationEnd={(event) => handleAnimationEnd(0, event)} />
+                    <TextInput label={"UOID"} placeholder={"951234567"} value={user['uoid']} regExp={regexUoidString} causeShake={shakes[1]} onChange={(value) => textInputHandler('uoid', value)} onAnimationEnd={(event) => handleAnimationEnd(1, event)} />
                     <p className="text-red-500 text-sm text-left place-self-stretch">{formError}</p>
                     <Submit onClick={submitHandler} />
                 </div>

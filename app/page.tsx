@@ -6,6 +6,8 @@ import FormSubmit from "@/components/FormSubmit";
 
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const EMPTY = -1;
+
 
 export default function Home() {
   const numWeeks = 11;
@@ -28,9 +30,9 @@ export default function Home() {
     }));
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (name: string, uoid: string) => {
     const isSucess = Object.entries(preferences).every(([key, arr]) => {
-      const index = arr.indexOf(-1);
+      const index = arr.indexOf(EMPTY);
       if (index !== -1) {
         const primary_or_secondary = index % 2 === 0 ? "primary" : "secondary";
         if (key === "term") {
@@ -43,9 +45,34 @@ export default function Home() {
       return true;
     });
     if (isSucess) {
-      console.log("Form submitted! - implement this.");
+      handlePostData(JSON.stringify({
+        ...preferences,
+        'name': name,
+        'uoid': uoid,
+      }));
     }
   };
+
+  const handlePostData = async (bodyJSON: string) => {
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: bodyJSON
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert('Error: ' + result.message);
+      }
+    } catch (error: any) {
+      alert('Error: ' + error.message);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-2">
