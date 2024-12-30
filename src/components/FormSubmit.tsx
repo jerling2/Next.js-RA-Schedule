@@ -52,10 +52,11 @@ function Submit({ onClick }: SubmitProps) {
 
 
 interface FormSubmitProps {
-    // pass
+    onFormSubmit: () => void;
+    formError: string;
 };
 
-export default function FormSubmit({}: FormSubmitProps) {
+export default function FormSubmit({ onFormSubmit, formError }: FormSubmitProps) {
     const regexNameString = "^[A-z\\-\\s']+$";
     const regexUoidString = "^95\\d{7}$"
     const regexName = RegExp(regexNameString);
@@ -90,7 +91,7 @@ export default function FormSubmit({}: FormSubmitProps) {
         if (updatedShakes.includes(true)) {
             setShakes(updatedShakes);
         } else {
-            console.log("Submitted!");
+            onFormSubmit();
         }
     }
 
@@ -100,6 +101,7 @@ export default function FormSubmit({}: FormSubmitProps) {
                 <div className="w-1/4 flex flex-col gap-y-4 place-items-center">
                     <TextInput label={"Name"} placeholder={"John Doe"} value={values['name']} regExp={regexNameString} causeShake={shakes[0]} onChange={(value) => textInputHandler('name', value)} onAnimationEnd={(event) => handleAnimationEnd(0, event)} />
                     <TextInput label={"UOID"} placeholder={"951234567"} value={values['uoid']} regExp={regexUoidString} causeShake={shakes[1]} onChange={(value) => textInputHandler('uoid', value)} onAnimationEnd={(event) => handleAnimationEnd(1, event)} />
+                    <p className="text-red-500 text-sm text-left place-self-stretch">{formError}</p>
                     <Submit onClick={submitHandler} />
                 </div>
             </div>

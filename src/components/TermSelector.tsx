@@ -1,26 +1,26 @@
 "use client";
-import { CSSProperties, useState, MouseEvent } from "react";
+import { CSSProperties, MouseEvent } from "react";
 import PriorityBox from "./PriorityBox";
 
 interface TermSelectorProps {
-    numWeeks: number,
-    weeksPerRow: number,
-    minPriority: number,
-    maxPriority: number
+    preferences: number[];
+    onPreferenceChange: (preferences: number[]) => void;
+    numWeeks: number;
+    weeksPerRow: number;
+    minPriority: number;
+    maxPriority: number;
 };
 
 export default function TermSelctor(
-    { numWeeks, weeksPerRow, minPriority, maxPriority }: TermSelectorProps) {
-
+    { preferences, onPreferenceChange, numWeeks, weeksPerRow, minPriority, maxPriority }: TermSelectorProps) {
+    
     const numLanes = Math.ceil(numWeeks / weeksPerRow);
     const numRoleRows = numLanes * 2;
-    
-    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(numWeeks * 2).fill(-1));
 
     const handleShiftPriorityChange = (index: number, value: number) => {
-        const updatedShiftPriorities = [...shiftPriorities];
+        const updatedShiftPriorities = [...preferences];
         updatedShiftPriorities[index] = value;
-        setShiftPriority(updatedShiftPriorities);
+        onPreferenceChange(updatedShiftPriorities);
     };
 
     return (
@@ -89,7 +89,7 @@ export default function TermSelctor(
                                         index={blockIdx} 
                                         minPriority={minPriority} 
                                         maxPriority={maxPriority} 
-                                        value={shiftPriorities[blockIdx]} 
+                                        value={preferences[blockIdx]} 
                                         onChange={handleShiftPriorityChange}
                                         specialKey="metaKey"/>
                                 </div>

@@ -3,20 +3,21 @@ import { useState, MouseEvent, CSSProperties } from "react"
 import PriorityBox from "./PriorityBox";
 
 interface WeekSelectorProps {
+    preferences: number[];
+    onPreferenceChange: (preferences: number[]) => void;
     weekNumber: number;
     minPriority: number;
     maxPriority: number;
 }
 
-export default function WeekSelector({ weekNumber, minPriority, maxPriority }: WeekSelectorProps) {
+export default function WeekSelector({ preferences, onPreferenceChange, weekNumber, minPriority, maxPriority }: WeekSelectorProps) {
     const numRows = 3;
     const numCols = 8;
-    const [shiftPriorities, setShiftPriority] = useState<number[]>(Array(14).fill(-1));
 
     const handleShiftPriorityChange = (index: number, value: number) => {
-        const updatedShiftPriorities = [...shiftPriorities];
+        const updatedShiftPriorities = [...preferences];
         updatedShiftPriorities[index] = value;
-        setShiftPriority(updatedShiftPriorities);
+        onPreferenceChange(updatedShiftPriorities);
     };
 
     return (
@@ -71,7 +72,7 @@ export default function WeekSelector({ weekNumber, minPriority, maxPriority }: W
                                         index={blockIdx} 
                                         minPriority={minPriority}
                                         maxPriority={maxPriority}
-                                        value={shiftPriorities[blockIdx]} 
+                                        value={preferences[blockIdx]} 
                                         onChange={handleShiftPriorityChange}
                                         specialKey="metaKey"/>
                                 </div>
