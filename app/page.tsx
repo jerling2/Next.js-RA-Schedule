@@ -6,11 +6,13 @@ import FormSubmit from "@/components/FormSubmit";
 
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const NUM_DAYS = DAYS.length;
 const EMPTY = -1;
 
 
 export default function Home() {
   const numWeeks = 11;
+  const weeksPerRow = 5;
   
   const [preferences, setPreferences] = useState<{ [key: string]: number[] }>(
     Array.from({ length: numWeeks }, (_, index) => `Week ${index + 1}`)
@@ -34,11 +36,14 @@ export default function Home() {
     const isSucess = Object.entries(preferences).every(([key, arr]) => {
       const index = arr.indexOf(EMPTY);
       if (index !== -1) {
-        const primary_or_secondary = index % 2 === 0 ? "primary" : "secondary";
         if (key === "term") {
+          const primary_or_secondary = Math.floor(index / numWeeks) === 0 ? "primary" : "secondary";
+
           setFormError(`*please select a preference for ${primary_or_secondary} on Week ${index % numWeeks + 1} in Term Priority`);
         } else {
-          setFormError(`*please select a preference for ${primary_or_secondary} on ${DAYS[index % 7]} in ${key}`);
+          const primary_or_secondary = Math.floor(index / NUM_DAYS) === 0 ? "primary" : "secondary";
+
+          setFormError(`*please select a preference for ${primary_or_secondary} on ${DAYS[index % NUM_DAYS]} in ${key}`);
         }
         return false;
       } 
@@ -76,7 +81,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-2">
-      <TermSelctor preferences={preferences['term']} onPreferenceChange={(preferences) => handlePreferenceChange('term', preferences)} numWeeks={numWeeks} weeksPerRow={5} minPriority={1} maxPriority={11} />
+      <TermSelctor preferences={preferences['term']} onPreferenceChange={(preferences) => handlePreferenceChange('term', preferences)} numWeeks={numWeeks} weeksPerRow={weeksPerRow} minPriority={1} maxPriority={11} />
       
       {[...Array(11)].map((_, index) => {
         const weekIdx = `Week ${index + 1}`;
