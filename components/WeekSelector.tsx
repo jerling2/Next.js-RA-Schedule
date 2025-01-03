@@ -1,5 +1,5 @@
 "use client";
-import { useState, MouseEvent, CSSProperties } from "react"
+import { MouseEvent, CSSProperties } from "react"
 import PriorityBox from "./PriorityBox";
 
 interface WeekSelectorProps {

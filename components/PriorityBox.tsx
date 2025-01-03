@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, MouseEvent } from 'react';
+import { MouseEvent } from 'react';
 
 const LEFT_CLICK = 0;
 const RIGHT_CLICK = 2;

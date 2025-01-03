@@ -1,7 +1,10 @@
 "use client";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/components/AuthProvider';
 
 export default function Home() {
+  const user = useAuthContext();
+  console.log(user);
   const router = useRouter();
 
   return (

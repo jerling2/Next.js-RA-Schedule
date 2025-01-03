@@ -2,6 +2,12 @@
 
 data/*
 
+# Firebase build dist.
+.firebase/*
+
+# Firebase Debug logs
+*-debug.log
+
 # dependencies
 /node_modules
 /.pnp

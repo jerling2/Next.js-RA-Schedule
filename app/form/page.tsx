@@ -74,8 +74,12 @@ export default function Form() {
       } else {
         alert('Error: ' + result.message);
       }
-    } catch (error: any) {
-      alert('Error: ' + error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert('Error: ' + error.message);
+      } else {
+        alert('An unknown error has occured');
+      }
     }
   }
 
