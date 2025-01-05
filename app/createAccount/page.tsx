@@ -15,7 +15,7 @@ export default function Home() {
           <button className='w-1/2 h-1/2 mb-10 h-1/1 bg-sky-600 text-white rounded-full text-2xl' onClick={() => router.push('/signIn')}>
             Sign in
           </button>
-          <div className='cursor-pointer font-bold hover:underline text-sky-500' onClick={() => router.push('/createAccount')}>
+          <div className='cursor-pointer underline text-sky-500' onClick={() => router.push('/createAccount')}>
             Create an account
           </div>
         </div>
