@@ -1,0 +1,23 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false  //< Use ES6 module 'import' & 'export'
+      }
+    ],
+    "@babel/preset-typescript" //< Transpile typescript.
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "@": "./src" //< CAUTION - differs (slightly) from tsconfig - DON'T CHANGE.
+        }
+      }
+    ],
+    ["babel-plugin-add-import-extension"] //< Tell babel to add .js extention to imports.
+  ]
+}

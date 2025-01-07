@@ -1,0 +1,27 @@
+// https://www.typescriptlang.org/tsconfig/
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES6",
+    "lib": ["ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true, //< Do not output js files, we are using Babel for transpilation.
+    "esModuleInterop": true,
+    "moduleResolution": "node", 
+    "resolveJsonModule": true,
+    "isolatedModules": true, // Warn if typescript code you write will interfer with Bable
+    "plugins": [
+      {
+        "name": "next" // IDE linting
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
