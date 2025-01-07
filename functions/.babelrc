@@ -3,6 +3,9 @@
     [
       "@babel/preset-env",
       {
+        "targets": {
+          "node": "current"
+        },
         "modules": false  //< Use ES6 module 'import' & 'export'
       }
     ],

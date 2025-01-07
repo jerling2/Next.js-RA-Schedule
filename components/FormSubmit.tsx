@@ -28,8 +28,6 @@ function TextInput({ label, placeholder, value, regExp, causeShake, onChange, on
                 invalid:border-pink-500 invalid:text-pink-600
                 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ${causeShake ? 'animate-shake' : ''}`}>
             </input>
-            
-        
         </div>
     );
 };

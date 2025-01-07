@@ -20,9 +20,14 @@ export default {
           '75%': { transform: 'translateX(-5px)' },
           '100%': { transform: 'translateX(0)' },
         },
+        moveOffScreen: {
+          '0%': {transform: 'translateX(0)'},
+          '100%': { transform: 'translateX(-100vw)'}
+        }
       },
       animation: {
         shake: 'shake 0.5s ease-in-out',
+        'move-left': 'moveOffScreen linear'
       },
     },
   },

@@ -1,13 +1,15 @@
-// import { initializeApp } from "firebase-admin";
-// import { getAuth } from "firebase-admin/auth";
 
-// if (process.env.PROJECT_ID === undefined) {
-//     throw new Error("Project ID not defined");
-// }
+import dotenv from 'dotenv';
+import admin from "firebase-admin"; //< for some reason I can't import { initializeApp }.
+import { getAuth } from "firebase-admin/auth";
 
-// const app = initializeApp({ projectId: process.env.PROJECT_ID });
-// const auth = getAuth(app);
+dotenv.config({ path: '.env.local' });
 
-// export { app, auth };
+if (process.env.PROJECT_ID === undefined) {
+    throw new Error("Project ID not defined");
+}
 
-export const test = 2;
+const app = admin.initializeApp({ projectId: process.env.PROJECT_ID });
+const auth = getAuth(app);
+
+export { app, auth };
