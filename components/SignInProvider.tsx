@@ -10,13 +10,15 @@ const SignInContext = createContext<SignInContextType | undefined>(undefined);
 
 
 export default function SignInContextProvider({ children }: Readonly<{children: ReactNode}>) {
-    const [email, setEmail] = useState<string>(() => {
-        const sessionEmail = sessionStorage.getItem('user-identifier');
-        return sessionEmail ? sessionEmail : "";
-    });
+    const [email, setEmail] = useState<string>('');
 
     useEffect(() => {
-        sessionStorage.setItem("user-identifier", email);
+        const sessionEmail = sessionStorage.getItem('user-identifier');
+        if (email === '' && sessionEmail !== null) {
+            setEmail(sessionEmail);
+        } else {
+            sessionStorage.setItem("user-identifier", email);
+        }
         return () => {
             sessionStorage.removeItem("user-identifier");
         };

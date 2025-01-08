@@ -6,7 +6,7 @@ import { FirebaseError } from 'firebase/app';
 import { User } from "firebase/auth";
 import { auth } from '@/lib/client/firebase';
 import { getIdToken, setPersistence, browserSessionPersistence, createUserWithEmailAndPassword, Auth, fetchSignInMethodsForEmail, signInWithEmailAndPassword, UserCredential} from 'firebase/auth';
-
+import { useRouter } from "next/navigation";
 
 /*can 
 
@@ -74,21 +74,28 @@ const checkUserEmail: CheckUserEmail = async (email) => {
     }
 }
 
-type SigninJWT = (
+type FetchAuthToken = (
     user: User, 
-) => Promise<void>;
+) => Promise<boolean>;
 
-const signinJWT: SigninJWT = async (user) => {
+const fetchAuthToken: FetchAuthToken = async (user) => {
     try {
         const JWT = await getIdToken(user);
-        await fetch('/dashboard', {
+        const response = await fetch('/api/authenticate', {
+            method: "POST",
             headers: {
                 'Authorization': `Bearer ${JWT}`
             }
         });
+        if (response.ok) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (error: unknown) {
-        alert(error);
+        alert(`Problem in fetchAuthToken ${error}`);
+        return false;
     };
 }
 
-export { auth, signinJWT, signupEmail, signinEmail, checkUserEmail };
+export { auth, fetchAuthToken, signupEmail, signinEmail, checkUserEmail };
