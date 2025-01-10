@@ -1,4 +1,5 @@
 const nextConfig = {
+  // Turbopack Configuration Reference: https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo#configuring-webpack-loaders
   experimental: {
     turbo: {
       rules: {
@@ -9,6 +10,7 @@ const nextConfig = {
       },
     },
   },
+  // @svgr/webpack Installation Reference: https://react-svgr.com/docs/next/
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
