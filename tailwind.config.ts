@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      padding: {
+        'dynamic-container': 'clamp(16px, 12%, 100vw)' //< using 100vw to denote "max->infinity".
+      },
       keyframes: {
         shake: {
           '0%': { transform: 'translateX(0)' },
