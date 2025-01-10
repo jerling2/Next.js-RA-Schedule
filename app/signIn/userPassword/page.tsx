@@ -1,5 +1,5 @@
 "use client";
-import { useSignInContext } from "@/components/SignInProvider";
+import { useEmailContext } from "@/components/EmailProvider";
 import FieldInput from "@/components/FieldInput";
 import SmallButton from "@/components/NextButton";
 import { useRouter } from "next/navigation";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { signinEmail } from "@/lib/client/auth";
 
 export default function PasswordSignIn () {
-    const {email} = useSignInContext();
+    const {email} = useEmailContext();
     const [pass, setPass] = useState<string>("");
     const [shake, setShake] = useState<boolean>(false);
     const [isError, setError] = useState<boolean>(false);

@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import FieldInput from '@/components/FieldInput';
 import SmallButton from '@/components/NextButton';
 import { checkUserEmail } from "@/lib/client/auth";
-import { useSignInContext } from '@/components/SignInProvider';
+import { useEmailContext } from '@/components/EmailProvider';
 
 export default function EmailSignIn() {
     const router = useRouter();
-    const {email, setEmail} = useSignInContext();
+    const {email, setEmail} = useEmailContext();
     const [isLoading, setLoading] = useState<boolean>(false);
     const [shake, setShake] = useState<boolean>(false);
     const [isError, setError] = useState<boolean>(false);

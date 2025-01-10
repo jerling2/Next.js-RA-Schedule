@@ -1,15 +1,15 @@
 "use client"
 import { useState, createContext, useContext, ReactNode, useEffect } from 'react';
 
-interface SignInContextType {
+interface EmailContextType {
     email: string;
     setEmail: (email: string) => void;
 }
 
-const SignInContext = createContext<SignInContextType | undefined>(undefined);
+const EmailContext = createContext<EmailContextType | undefined>(undefined);
 
 
-export default function SignInContextProvider({ children }: Readonly<{children: ReactNode}>) {
+export default function EmailContextProvider({ children }: Readonly<{children: ReactNode}>) {
     const [email, setEmail] = useState<string>('');
 
     useEffect(() => {
@@ -25,18 +25,18 @@ export default function SignInContextProvider({ children }: Readonly<{children: 
     }, [email]);
 
     return (
-        <SignInContext.Provider value={{email, setEmail}}>
+        <EmailContext.Provider value={{email, setEmail}}>
             {children}
-        </SignInContext.Provider>
+        </EmailContext.Provider>
     )
 }
 
-const useSignInContext = (): SignInContextType  => {
-    const context = useContext(SignInContext);
+const useEmailContext = (): EmailContextType  => {
+    const context = useContext(EmailContext);
     if (context === undefined) {
         throw new Error("useSignInContext must be used within a SignInContextProvider");
     }
     return context;
 }
 
-export { useSignInContext };
+export { useEmailContext };

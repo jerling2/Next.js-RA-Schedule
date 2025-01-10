@@ -12,7 +12,10 @@
   },
   "emulators": {
     "auth": {
-      "port": 9099
+      "port": 9099,
+      "blockingFunctions": {
+        "beforeCreate": true
+      }
     },
     "hosting": {
       "port": 5001,

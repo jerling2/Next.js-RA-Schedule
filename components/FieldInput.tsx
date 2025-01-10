@@ -15,7 +15,6 @@ export default function TextInput({ type="text", placeholder="", value=undefined
     const inputInvalid = invalid ? 'border-red-400' : 'border-slate-400 invalid:border-red-400 focus:border-blue-400'
     const placeholderInvalid = invalid ? 'text-red-400' : 'text-slate-400 peer-invalid/input:text-red-400 peer-focus/input:text-blue-400'
     const pseudoPlaceHolder = placeholder === "" ? "" : `.${placeholder}.`;
-
     return (
         <div className="relative flex w-full h-full text-lg place-items-center">
             <input type={type} 

@@ -7,9 +7,11 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {onRequest} from "firebase-functions/v2/https";
+import { onRequest } from "firebase-functions/v2/https";
+import { identity } from "firebase-functions/v2";
 import * as logger from "firebase-functions/logger";
 import { auth } from "@/admin";
+import { AuthBlockingEvent } from "firebase-functions/identity";
 
 export const decodeJWT = onRequest(async (req, res) => {
     const contentType = req.headers['content-type'];
@@ -26,6 +28,13 @@ export const decodeJWT = onRequest(async (req, res) => {
         res.status(200).send({data: decodedIdToken});
     } catch {
         res.status(400).send({error: "Invalid body of request"});
+    }
+});
+
+export const addDefaultClaimsOnSignUp = identity.beforeUserCreated(() => {
+    logger.info("Adding custom claim to user");
+    return {
+        customClaims: {role: "user"}
     }
 });
 

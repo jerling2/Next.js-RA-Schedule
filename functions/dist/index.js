@@ -1,4 +1,5 @@
 import { onRequest } from "firebase-functions/v2/https";
+import { identity } from "firebase-functions/v2";
 import * as logger from "firebase-functions/logger";
 import { auth } from "./admin.js";
 export const decodeJWT = onRequest(async (req, res) => {
@@ -25,4 +26,12 @@ export const decodeJWT = onRequest(async (req, res) => {
       error: "Invalid body of request"
     });
   }
+});
+export const addDefaultClaimsOnSignUp = identity.beforeUserCreated(() => {
+  logger.info("Adding custom claim to user");
+  return {
+    customClaims: {
+      role: "user"
+    }
+  };
 });

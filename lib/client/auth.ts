@@ -3,20 +3,13 @@
  */
 "use client";
 import { FirebaseError } from 'firebase/app';
-import { User } from "firebase/auth";
+import { User, ActionCodeSettings } from "firebase/auth";
 import { auth } from '@/lib/client/firebase';
-import { getIdToken, setPersistence, browserSessionPersistence, createUserWithEmailAndPassword, Auth, fetchSignInMethodsForEmail, signInWithEmailAndPassword, UserCredential} from 'firebase/auth';
-import { useRouter } from "next/navigation";
+import { getIdToken, createUserWithEmailAndPassword, Auth, fetchSignInMethodsForEmail, signInWithEmailAndPassword, UserCredential, signOut} from 'firebase/auth';
 
-/*can 
-
-TODO:
- * signInWithCredential(auth, credential) https://firebase.google.com/docs/reference/js/auth.md#signinwithcredential_8074518
- * signOut(auth) https://firebase.google.com/docs/reference/js/auth.md#signout_2a61ea7
- * sendEmailVerification(user, actionCodeSettings) https://firebase.google.com/docs/reference/js/auth.md#sendemailverification_6a885d6
- * updatePassword(user, newPassword) https://firebase.google.com/docs/reference/js/auth.md#updatepassword_6df673e
- * updateEmail(user, newEmail) https://firebase.google.com/docs/reference/js/auth.md#updateemail_7737d57
-*/
+const actionCodeSettings: ActionCodeSettings = {
+    url: "http://localhost:3000"
+}
 
 type SignupEmail = (
     auth: Auth,
@@ -26,7 +19,7 @@ type SignupEmail = (
 
 const signupEmail: SignupEmail = async (auth, email, password) => {
     try {
-        await createUserWithEmailAndPassword(auth, email, password); //< returns UserCredentials
+        await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: unknown) {
         if (error instanceof FirebaseError) {
             const errorCode = error.code;
@@ -45,7 +38,7 @@ type SigninEmail = (
 
 const signinEmail: SigninEmail = async (email, password) => {
     try {
-        await setPersistence(auth, browserSessionPersistence);
+        // await setPersistence(auth, browserSessionPersistence); //< Set browser persistance.
         return await signInWithEmailAndPassword(auth, email, password);
     } catch (error: unknown) {
         if (!(error instanceof FirebaseError)) {
@@ -98,4 +91,17 @@ const fetchAuthToken: FetchAuthToken = async (user) => {
     };
 }
 
-export { auth, fetchAuthToken, signupEmail, signinEmail, checkUserEmail };
+const signOutUser = async () => {
+    try {
+        await signOut(auth);
+        await fetch('/api/signOut', {
+            method: "POST",
+            credentials: "same-origin"
+        })
+    } catch(error: unknown) {
+        alert(`Uncaught error ${error}`);
+    }
+}
+
+export { auth, actionCodeSettings, fetchAuthToken, signupEmail, signinEmail, checkUserEmail, signOutUser };
+
