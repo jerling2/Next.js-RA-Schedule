@@ -46,12 +46,9 @@ export default function EmailSignIn() {
       <div className='text-4xl mb-24 text-black'>
           Sign in
       </div>
-      <div className='flex flex-col gap-y-2 place-items-start w-full h-1/5'>
+      <div className='flex flex-col gap-y-2 place-items-start w-full min-h-16 h-[10%]'>
         <div className={`w-full h-full ${shake ? 'animate-shake' : ''}`} onAnimationEnd={() => setShake(false)}>
           <FieldInput placeholder={`Email${isError ? ' - Couldn\'t find your account' : ''}`} value={email} pattern={emailRegExpString} onChange={handleFieldChange} disabled={isLoading} invalid={isError}/>
-        </div>
-        <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'>
-          Forgot email?
         </div>
       </div>
       <div className='flex flex-row w-full h-12 justify-between place-items-center'>

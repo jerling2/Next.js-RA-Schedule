@@ -1,9 +1,12 @@
 "use client";
-
+import DashboardHeader from "@/components/DashboardHeader";
 export default function Dashboard() {
     return (
-        <div>
-            protected
-        </div>
+        <>
+            <DashboardHeader />
+            <div>
+                protected
+            </div>
+        </>
     );
 }

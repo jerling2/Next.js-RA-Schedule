@@ -4,7 +4,8 @@ import FieldInput from "@/components/FieldInput";
 import SmallButton from "@/components/NextButton";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signinEmail } from "@/lib/client/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth, signinEmail } from "@/lib/client/auth";
 
 export default function PasswordSignIn () {
     const {email} = useEmailContext();
@@ -42,13 +43,14 @@ export default function PasswordSignIn () {
           <div className={`w-full h-full ${shake ? 'animate-shake' : ''}`} onAnimationEnd={()=>setShake(false)}>
             <FieldInput type="password" placeholder="Password" onChange={setPass} invalid={isError}/>
           </div>
-          <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'>
+          <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'
+               onClick={()=>{sendPasswordResetEmail(auth, email); router.push("forgotPassword")}}>
             Forgot password?
           </div>
         </div>
         <div className='flex flex-row w-full h-12 justify-between place-items-center'>
             <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'
-            onClick={() => router.push('/signIn/userIdentifier')}>
+            onClick={() => router.push('userIdentifier')}>
             Back    
             </div>
             <div className='w-24 h-full'>
