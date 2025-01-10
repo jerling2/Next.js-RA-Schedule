@@ -7,6 +7,13 @@ import { useState } from "react";
 
 export default function Dashboard() {
     const [currentTarget, setCurrentTarget] = useState<EventTarget & HTMLElement | undefined>(undefined);
+
+    const handlePopUpMenuRender = (render: boolean) => {
+        if (!render) {
+            setCurrentTarget(undefined);
+        }
+    }
+
     return (
         <>
             <DashboardHeader />
@@ -30,7 +37,7 @@ export default function Dashboard() {
                     </Card>
                 </div>
             </div>
-            <PopUpMenu currentTarget={currentTarget} />
+            <PopUpMenu currentTarget={currentTarget} onRender={handlePopUpMenuRender} />
         </>
     );
 }
