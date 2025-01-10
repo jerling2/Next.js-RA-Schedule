@@ -4,7 +4,7 @@ import { useAuthContext } from "@/components/AuthProvider";
 import { deleteUser } from "firebase/auth";
 import { signOutUser } from "@/lib/client/auth";
 import { useRouter } from "next/navigation";
-import DashboardSettingsHeader from "@/components/DashboardSettingsHeader";
+import DashboardHeader from "@/components/DashboardHeader";
 
 export default function DashboardSettings () {
     const router = useRouter();
@@ -27,7 +27,7 @@ export default function DashboardSettings () {
 
     return (
         <>
-        <DashboardSettingsHeader />
+        <DashboardHeader currentPage="settings" />
         <div className="relative flex flex-row justify-center w-full">
             <div className="flex flex-col w-[78%] mt-5">
                 <h1 className="text-2xl mb-5 font-bold">
