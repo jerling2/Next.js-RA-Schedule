@@ -11,10 +11,10 @@ export default function SmallButton({ value="Next", isLoading=false, onClick=()=
     if (!isLoading) {
         return (
             <button className="flex w-full h-full place-items-center justify-center border-box
-            bg-sky-600 rounded-full
+            rounded-full
             select-none cursor-pointer
-            text-slate-50 text-lg font-bold
-            transition-all hover:bg-sky-700"
+            text-inherit text-lg font-bold
+            transition-all"
             onClick={() => onClick()}>
                 {value}
             </button>
@@ -22,7 +22,7 @@ export default function SmallButton({ value="Next", isLoading=false, onClick=()=
     } else {
         return (
             <div className="flex w-full h-full place-items-center justify-center border-box
-            bg-sky-600 rounded-full
+            rounded-full
             select-none cursor-default">
                 <TailSpin
                 color={'#FFFFFF'}

@@ -43,20 +43,24 @@ export default function EmailSignIn() {
 
     return (
       <>
-      <div className='text-4xl mb-24 text-black'>
+      <div className='text-5xl mt-7 pb-2 h-fit font-bold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text'>
           Sign in
       </div>
-      <div className='flex flex-col gap-y-2 place-items-start w-full min-h-16 h-[10%]'>
-        <div className={`w-full h-full ${shake ? 'animate-shake' : ''}`} onAnimationEnd={() => setShake(false)}>
-          <FieldInput placeholder={`Email${isError ? ' - Couldn\'t find your account' : ''}`} value={email} pattern={emailRegExpString} onChange={handleFieldChange} disabled={isLoading} invalid={isError}/>
-        </div>
+      <div className={`w-[75%] aspect-[4/1] bg-background-1 border-primary text-primary ${shake ? 'animate-shake' : ''}`}
+      onAnimationEnd={() => setShake(false)}>
+        <FieldInput 
+          placeholder={`Email${isError ? ' - Couldn\'t find your account' : ''}`} 
+          value={email} pattern={emailRegExpString} 
+          onChange={handleFieldChange} 
+          disabled={isLoading}
+          invalid={isError}/>
       </div>
-      <div className='flex flex-row w-full h-12 justify-between place-items-center'>
-        <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'
+      <div className='flex flex-row w-[75%] h-12 justify-between place-items-center mb-7'>
+        <div className='cursor-pointer text-accent hover:bg-accent-hover rounded-full p-1 font-bold'
         onClick={() => router.push('/createAccount')}>
           Create account
         </div>
-        <div className='w-24 h-full'>
+        <div className='w-24 h-full [&>*]:bg-primary text-black [&>*]:hover:bg-primary-hover'>
           <SmallButton isLoading={isLoading} onClick={handleOnButtonClick}/>
         </div>
       </div>

@@ -10,12 +10,15 @@ export default {
     darkMode: 'class',
     extend: {
       colors: {
+        invalid: 'var(--invalid)',
+        focus: 'var(--focus)',
         primary: 'var(--primary)',
         'primary-hover': 'var(--primary-hover)',
         secondary: 'var(--secondary)',
         accent: 'var(--accent)',
         'accent-15': 'var(--accent-15)',
         'accent-10': 'var(--accent-10)',
+        'accent-hover': 'var(--accent-hover)',
         'background-1': 'var(--background-1)',
         'background-2': 'var(--background-2)',
         'background-3': 'var(--background-3)',

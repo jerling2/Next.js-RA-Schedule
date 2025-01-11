@@ -6,9 +6,10 @@ export default function SignInLayout({
     children: React.ReactNode;
   }>) {
     return (
+      // min-w-[400px] w-1/4 aspect-square
         <EmailContextProvider>
-            <div className="flex min-h-96 h-screen justify-center place-items-center drop-shadow-lg text-center">
-                <div className="relative px-40 min-w-fit min-h-fit justify-center flex flex-col h-2/3 gap-y-10 w-1/2 bg-slate-50 place-items-center rounded-xl overflow-hidden">
+            <div className="flex flex-row h-screen justify-center items-center">
+                <div className="flex flex-col min-w-[400px] w-1/4 aspect-square overflow-hidden bg-background-2 rounded-lg items-center justify-between shadow-color">
                     {children}
                 </div>
             </div>
