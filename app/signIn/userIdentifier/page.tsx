@@ -56,7 +56,7 @@ export default function EmailSignIn() {
           invalid={isError}/>
       </div>
       <div className='flex flex-row w-[75%] h-12 justify-between place-items-center mb-7'>
-        <div className='cursor-pointer text-accent hover:bg-accent-hover rounded-full p-1 font-bold'
+        <div className='cursor-pointer text-accent hover:bg-accent-hover rounded-full p-2 font-bold'
         onClick={() => router.push('/createAccount')}>
           Create account
         </div>

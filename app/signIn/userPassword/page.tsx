@@ -36,24 +36,29 @@ export default function PasswordSignIn () {
 
     return (
         <>
-        <div className='text-4xl mb-24 text-black'>
-            Sign in
+        <div className='text-5xl mt-7 pb-2 h-fit font-bold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text'>
+          Sign in
         </div>
-        <div className='flex flex-col gap-y-2 place-items-start w-full h-1/5'>
-          <div className={`w-full h-full ${shake ? 'animate-shake' : ''}`} onAnimationEnd={()=>setShake(false)}>
-            <FieldInput type="password" placeholder="Password" onChange={setPass} invalid={isError}/>
-          </div>
-          <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'
-               onClick={()=>{sendPasswordResetEmail(auth, email); router.push("forgotPassword")}}>
-            Forgot password?
-          </div>
+        <div className="w-[75%]">
+            <div className={`aspect-[4/1] bg-background-1 border-primary text-primary ${shake ? 'animate-shake' : ''}`}
+            onAnimationEnd={() => setShake(false)}>
+                <FieldInput 
+                    type="password"
+                    placeholder="Password" 
+                    onChange={setPass} 
+                    invalid={isError}/>
+            </div>
+            <div className='mt-4 w-fit p-1 font-bold text-accent  hover:bg-accent-hover rounded-full cursor-pointer '
+                onClick={()=>{sendPasswordResetEmail(auth, email); router.push("forgotPassword")}}>
+                Forgot password?
+            </div>
         </div>
-        <div className='flex flex-row w-full h-12 justify-between place-items-center'>
-            <div className='cursor-pointer hover:bg-sky-100 rounded-full p-1 text-sky-500 font-bold'
+        <div className="flex flex-row justify-between w-[75%] h-12 mb-7 items-center">
+        <div className='cursor-pointer hover:bg-accent-hover rounded-full p-2 text-accent font-bold'
             onClick={() => router.push('userIdentifier')}>
             Back    
             </div>
-            <div className='w-24 h-full'>
+            <div className='w-24 h-full [&>*]:bg-primary [&>*]:hover:bg-primary-hover text-black'>
                 <SmallButton onClick={handleFormSubmit} isLoading={isLoading}/>
             </div>
         </div>
