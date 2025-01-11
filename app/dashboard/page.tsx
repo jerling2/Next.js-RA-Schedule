@@ -4,9 +4,12 @@ import PopUpMenu from "@/components/PopUpMenu";
 import ThreeVerticalDots from "@/public/icons/threeVerticalDots.svg"
 import Card from "@/components/Card";
 import { useState } from "react";
+import Done from "@/public/icons/done.svg";
+import Pending from "@/public/icons/pending.svg";
 
 export default function Dashboard() {
     const [currentTarget, setCurrentTarget] = useState<EventTarget & HTMLElement | undefined>(undefined);
+    const [approvalStatus, setApprovalStatus] = useState<string>("approved");
 
     const handlePopUpMenuRender = (render: boolean) => {
         if (!render) {
@@ -23,12 +26,25 @@ export default function Dashboard() {
                         <div className="grid grid-cols-4 items-center w-full font-bold bg-slate-100">
                             <div>Title</div>
                             <div>Submitted</div>
-                            <div>Approved</div>
+                            <div>Approval Status</div>
                         </div>
-                        <div className="grid grid-cols-4 items-center w-full font-base bg-white">
+                        <div className="grid grid-rows-[3rem] grid-cols-4 items-center w-full font-base bg-white">
                             <div>Winter Schedule 2024</div>
                             <div>1/6/2</div>
-                            <div>Yes</div>
+                            <div className="relative h-full justify-self-start flex items-center justify-start aspect-square">
+                                {approvalStatus==="pending" && <>
+                                <Pending className="h-full aspect-square text-yellow-500"/>
+                                <div className="ml-2 text-sm font-bold text-yellow-500">
+                                    Pending
+                                </div>
+                                </>}
+                                {approvalStatus==="approved" && <>
+                                <Done className="h-full aspect-square text-green-500"/>
+                                <div className="ml-2 text-sm font-bold text-green-500">
+                                    Approved
+                                </div>
+                                </>}
+                            </div>
                             <div className="relative justify-self-end h-full aspect-square mr-8 flex justify-center cursor-pointer hover:bg-slate-100 rounded-full"
                                  onClick={(e) =>setCurrentTarget(e.currentTarget)}>
                                 <ThreeVerticalDots className="h-full aspect-square text-slate-500" />
