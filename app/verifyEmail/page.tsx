@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { sendEmailVerification } from "firebase/auth";
 import { useAuthContext } from "@/components/AuthProvider";
 import { useRouter, useSearchParams } from "next/navigation";
+import SmallButton from "@/components/NextButton";
+
 
 export default function VerifyEmail() {
     const router = useRouter();
@@ -52,23 +54,25 @@ export default function VerifyEmail() {
     }, [searchParams]);
 
     return (
-        <div className="relative w-screen h-screen flex justify-center place-items-center">
-            <div className="relative flex flex-col place-items-center justify-around min-w-[600px] w-1/2 aspect-[4/3] bg-slate-50 drop-shadow-lg rounded-xl">
-                <div className="text-lg font-bold">
-                    A link has been sent to {displayEmail()}
+        <div className="relative flex flex-row h-screen justify-center items-center">
+            <div className="relative flex flex-col min-w-[450px] w-1/3 aspect-square justify-between bg-background-2 shadow-color items-center rounded-2xl [&>*]:w-[75%]">
+                <div className="text-xl mt-7 h-fit font-bold text-center">
+                    A link has been sent to <span className="bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text">{displayEmail()}</span>
                 </div>
                 <div className="text-lg">
                     You will be redirected automatically once you verify your email.
                 </div>
-                <div>
-                    {timeLeft > 0 && 
-                    <div>
-                    You can resend the link in {timeLeft}
+
+                <div className="flex h-12 justify-center items-center mb-7">
+                    { timeLeft === 0 && 
+                    <div className="font-bold text-black cursor-pointer h-full w-fit [&>*]:p-2 [&>*]:bg-primary text-black [&>*]:hover:bg-primary-hover rounded-full" > 
+                        <SmallButton value="Resend link" 
+                        onClick={() => resendLink()} />
                     </div>}
-                    {timeLeft === 0 && 
-                    <button className="bg-sky-300 hover:bg-sky-400 transition-all duration-200 rounded-full p-4 text-slate-900 font-bold" onClick={() => resendLink()}>
-                        Resend link
-                    </button>}
+                    {timeLeft > 0 &&
+                    <div>
+                        You can resend the link in {timeLeft}
+                    </div>}
                 </div>
             </div>
         </div>
