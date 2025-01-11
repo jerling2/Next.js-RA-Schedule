@@ -7,16 +7,30 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    darkMode: 'class',
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: 'var(--primary)',
+        'primary-hover': 'var(--primary-hover)',
+        secondary: 'var(--secondary)',
+        accent: 'var(--accent)',
+        'accent-15': 'var(--accent-15)',
+        'accent-10': 'var(--accent-10)',
+        'background-1': 'var(--background-1)',
+        'background-2': 'var(--background-2)',
+        'background-3': 'var(--background-3)',
+        'background-4': 'var(--background-4)',
+        'background-5': 'var(--background-5)',
+        'background-6': 'var(--background-6)',
+        'background-7': 'var(--background-7)',
+        text: 'var(--text)',
       },
       padding: {
         'dynamic-container': 'clamp(16px, 12%, 100vw)' //< using 100vw to denote "max->infinity".
       }, 
       boxShadow: {
         'direct': 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
+        'color': 'rgba(0, 0, 0, .4) 0px 0px 20px 15px, var(--secondary-25) -75px -75px 100px 10px, var(--accent-15) 75px 75px 100px 10px'
       },
       keyframes: {
         shake: {

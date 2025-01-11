@@ -13,7 +13,7 @@ export default function Dashboard() {
     const router = useRouter();
     const [currentTarget, setCurrentTarget] = useState<EventTarget & HTMLElement | undefined>(undefined);
     const [approvalStatus, setApprovalStatus] = useState<string>("approved");
-    const [display, setDisplay] = useState<boolean>(false);
+    const [display, setDisplay] = useState<boolean>(true);
 
     const handlePopUpMenuRender = (render: boolean) => {
         if (!render) {
