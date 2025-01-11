@@ -14,6 +14,9 @@ export default {
       },
       padding: {
         'dynamic-container': 'clamp(16px, 12%, 100vw)' //< using 100vw to denote "max->infinity".
+      }, 
+      boxShadow: {
+        'direct': 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
       },
       keyframes: {
         shake: {

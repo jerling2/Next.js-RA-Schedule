@@ -2,13 +2,21 @@
 
 type NativeMouseEvent = MouseEvent;
 import { useState, useRef, useEffect, useCallback } from "react";
+import type { ReactNode } from "react";
 
 interface PopUpMenuProps {
     currentTarget?: EventTarget & HTMLElement  | undefined;
+    offsetX?: number;
+    offsetY?: number;
     onRender: (render: boolean) => void;
+    children: ReactNode,
+
 }
 
-export default function PopUpMenu({ currentTarget = undefined, onRender }: PopUpMenuProps) {
+export default function PopUpMenu({ 
+    currentTarget=undefined, offsetX=0, offsetY=0, onRender, children 
+}: PopUpMenuProps
+) {
     const menuRef = useRef<HTMLDivElement | null>(null);
     const [optCoords, setOptCoords] = useState<number[]>([0,0]);
     const [render, setRender] = useState<boolean>(false);
@@ -53,14 +61,20 @@ export default function PopUpMenu({ currentTarget = undefined, onRender }: PopUp
 
     return (
         <>
-        {render && <div
-        ref={menuRef}           
-        style={{
-            top: `${optCoords[0]}px`,
-            left: `${optCoords[1]}px`
-        }}
-        className='absolute w-[100px] aspect-square bg-red-500'/>}
-        {!render && <div></div>}
+        {render && 
+        <div
+            ref={menuRef}           
+            style={{
+                top: `${optCoords[0]+offsetX}px`,
+                left: `${optCoords[1]+offsetY}px`
+            }}
+            className='absolute bg-white rounded-md shadow-direct'>
+            <div className="relative py-3 [&>*]:px-8 [&>*]:text-lg">
+                {children}
+            </div>
+        </div>}
+       
+        {!render && <div/>}
         </>
     );
 }

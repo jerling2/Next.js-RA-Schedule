@@ -13,7 +13,7 @@ interface DashboardHeaderProps {
 export default function DashboardHeader({currentPage="home"}: DashboardHeaderProps) {
     const router = useRouter();
     return (
-        <div className="card flex flex-col justify-center place-items-end px-4 w-full h-[12%] min-h-[50px] bg-slate-50 drop-shadow-lg">
+        <div className="relative flex flex-col justify-center place-items-end px-4 w-full h-[12%] min-h-[50px] bg-slate-50 drop-shadow-lg">
             <div className="flex flex-row place-items-center gap-x-5">
                 <div className="[&>button]:p-1 [&>div]:p-1">
                     <SmallButton value="Sign out" onClick={()=>{signOutUser(); router.push("/")}}/>
