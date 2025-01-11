@@ -32,10 +32,6 @@ export default function forgotPassword () {
     const [confPlaceholder, setConfPlaceholder] = useState<string>('Confirm password');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const fieldInputStyle = (index: number) => (
-        `h-12 w-full border-inherit text-inherit bg-background-1 ${shakes[index] ? 'animate-shake' : ''}`
-    );
-
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prev) => {
@@ -149,14 +145,14 @@ export default function forgotPassword () {
                 onClick={() => requestReset()} />
             </div>
             }
-            <div className="flex flex-col w-[75%] gap-y-4 border-primary text-primary">
-                <div className={fieldInputStyle(0)} onAnimationEnd={()=>handleShakes(0, false)}>
+            <div className="flex flex-col w-[75%] [&>div]:h-12 [&>div]:border-primary [&>div]:bg-background-1 gap-y-4 text-primary">
+                <div className={`${shakes[0] ? 'animate-shake' : ''}`} onAnimationEnd={()=>handleShakes(0, false)}>
                     <FieldInput placeholder={oobCodePlaceholder} value={oobCode} onChange={handleOobFieldInput} invalid={oobInvalid} />
                 </div>
-                <div className={fieldInputStyle(1)} onAnimationEnd={()=>handleShakes(1, false)}>
+                <div className={`${shakes[1] ? 'animate-shake' : ''}`} onAnimationEnd={()=>handleShakes(1, false)}>
                     <FieldInput type="password" placeholder={passPlaceholder} pattern={passRegExpString} value={pass} onChange={setPass} />
                 </div>
-                <div className={fieldInputStyle(2)} onAnimationEnd={()=>handleShakes(2, false)}>
+                <div className={`${shakes[2] ? 'animate-shake' : ''}`} onAnimationEnd={()=>handleShakes(2, false)}>
                     <FieldInput type="password" placeholder={confPlaceholder} value={conf} onChange={setConf} invalid={!match} />
                 </div>
             </div>

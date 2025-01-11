@@ -40,7 +40,7 @@ export default function PasswordSignIn () {
           Sign in
         </div>
         <div className="w-[75%]">
-            <div className={`aspect-[4/1] bg-background-1 border-primary text-primary ${shake ? 'animate-shake' : ''}`}
+            <div className={`w-full max-h-24 aspect-[4/1] bg-background-1 border-primary text-primary ${shake ? 'animate-shake' : ''}`}
             onAnimationEnd={() => setShake(false)}>
                 <FieldInput 
                     type="password"

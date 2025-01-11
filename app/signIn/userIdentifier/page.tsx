@@ -46,7 +46,7 @@ export default function EmailSignIn() {
       <div className='text-5xl mt-7 pb-2 h-fit font-bold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text'>
           Sign in
       </div>
-      <div className={`w-[75%] aspect-[4/1] bg-background-1 border-primary text-primary ${shake ? 'animate-shake' : ''}`}
+      <div className={`w-[75%] max-h-24 aspect-[4/1] bg-background-1 border-primary text-primary ${shake ? 'animate-shake' : ''}`}
       onAnimationEnd={() => setShake(false)}>
         <FieldInput 
           placeholder={`Email${isError ? ' - Couldn\'t find your account' : ''}`} 
