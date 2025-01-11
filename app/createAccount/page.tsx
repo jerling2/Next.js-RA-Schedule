@@ -30,10 +30,6 @@ export default function CreateAccount() {
   const [confPlaceholder, setConfPlaceholder] = useState<string>('Confirm password');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fieldInputStyle = (index: number) => (
-    `h-12 ${shakes[index] ? 'animate-shake' : ''}`
-  );
-
   const handleShakes = (index: number, isShake: boolean) => {
     setShakes((prev) => {
       const updatedShakes = [...prev];
@@ -127,13 +123,56 @@ export default function CreateAccount() {
   }, [pass, conf])
 
   return (
-    <div className="relative flex w-screen h-screen justify-center place-items-center">
-      <div className="relative w-[40%] min-w-[600px] aspect-[3/3] bg-slate-50 drop-shadow-lg py-20 px-5 rounded-xl">
-        <div className="relative flex flex-col w-full h-full justify-start place-items-center">
-          <div className="text-3xl text-slate-800 mb-10">
+    <div className="relative flex flex-row h-screen justify-center items-center">
+      <div className="relative flex flex-col min-w-[400px] w-1/3 aspect-square justify-between bg-background-2 shadow-color items-center rounded-2xl">
+        
+          <div className="text-3xl mt-7 font-bold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text">
             Create Account
           </div>
-          <div className="flex flex-col w-1/2 h-full justify-between">
+          <div className="w-[75%]">
+            <div className={`border-primary text-primary bg-background-1 w-full max-h-16 aspect-[4/1] ${shakes[0] ? 'animate-shake' : ''}`} 
+            onAnimationEnd={()=>handleShakes(0, false)}>
+                <FieldInput 
+                type="text" 
+                value={email} 
+                onChange={setEmail} 
+                placeholder={emailPlaceholder} 
+                pattern={emailRegExpString} 
+                invalid={shakes[0]} />
+            </div>
+            <div className="font-bold w-fit h-fit mt-2 text-accent hover:bg-accent-hover p-2 rounded-full cursor-pointer"
+            onClick={() => router.push("/signIn/userIdentifier")}>
+              Already have an account?
+            </div>
+          </div>
+          <div className={`w-[75%] max-h-16 aspect-[4/1] border-primary text-primary bg-background-1 ${shakes[1] ? 'animate-shake' : ''}`} 
+          onAnimationEnd={()=>handleShakes(1, false)}>
+            <FieldInput 
+            type="password" 
+            placeholder={passPlaceholder} 
+            pattern={passRegExpString} 
+            value={pass} 
+            onChange={setPass}  
+            invalid={shakes[1]}  />
+          </div>
+          <div className={`w-[75%] max-h-16 aspect-[4/1] border-primary text-primary bg-background-1 ${shakes[2] ? 'animate-shake' : ''}`}
+          onAnimationEnd={()=>handleShakes(2, false)}>
+            <FieldInput 
+            type="password" 
+            placeholder={confPlaceholder}
+            value={conf}
+            onChange={setConf}
+            invalid={!match} />
+          </div>
+          <div className="flex w-[75%] mb-7 justify-end items-center">
+            <div className="h-12 aspect-[2/1] text-black [&>*]:bg-primary [&>*]:hover:bg-primary-hover">
+              <SmallButton 
+              isLoading={loading} 
+              onClick={handleFormSubmit} />
+            </div>
+          </div>
+
+          {/* <div className="flex flex-col w-1/2 h-full justify-between">
             <div className="flex flex-col gap-y-2">
               <div className={fieldInputStyle(0)} onAnimationEnd={()=>handleShakes(0, false)}>
                 <FieldInput type="text" value={email} onChange={setEmail} placeholder={emailPlaceholder} pattern={emailRegExpString} invalid={shakes[0]} />
@@ -154,7 +193,7 @@ export default function CreateAccount() {
               </div>
             </div>  
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
