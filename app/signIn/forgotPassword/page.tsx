@@ -11,7 +11,7 @@ import SmallButton from "@/components/NextButton";
 export default function forgotPassword () {
     const router = useRouter();
     const { email } = useEmailContext();
-    const [timeLeft, setTimeLeft] = useState<number>(10);
+    const [timeLeft, setTimeLeft] = useState<number>(0);
     const minPassLen = 8;
     const maxPassLen = 128;
     const passUpper = '(?=(?:.*[A-Z]){1,})';
@@ -33,7 +33,7 @@ export default function forgotPassword () {
     const [loading, setLoading] = useState<boolean>(false);
 
     const fieldInputStyle = (index: number) => (
-        `h-12 w-full ${shakes[index] ? 'animate-shake' : ''}`
+        `h-12 w-full border-inherit text-inherit bg-background-1 ${shakes[index] ? 'animate-shake' : ''}`
     );
 
     useEffect(() => {
@@ -55,7 +55,7 @@ export default function forgotPassword () {
         }
       }, [pass, conf])
 
-    const requestReset = async () => {
+    const requestReset = () => {
         setTimeLeft(10);
         sendPasswordResetEmail(auth, email);
     }
@@ -135,29 +135,37 @@ export default function forgotPassword () {
       }
 
     return (
-        <div className="relative flex flex-col w-full h-full justify-center place-items-center gap-y-10">
+        <div className="relative flex flex-col w-full h-full justify-between place-items-center">
+            <div className="text-xl mt-7 h-fit font-bold">
+                A link has been sent to <span className="bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text">{email}</span>.
+            </div>
             {timeLeft > 0 && <div>
                 You can resend the link in ... {timeLeft} seconds
             </div>}
-            {timeLeft === 0 && <button className="p-4 bg-sky-500 rounded-full font-bold text-white cursor-pointer hover:bg-sky-600" onClick={() => requestReset()}>
-                Send a password reset link to {email}
-            </button>}
-            <div className={fieldInputStyle(0)} onAnimationEnd={()=>handleShakes(0, false)}>
-                <FieldInput placeholder={oobCodePlaceholder} value={oobCode} onChange={handleOobFieldInput} invalid={oobInvalid} />
+            {timeLeft === 0 &&
+            <div className="font-bold text-black cursor-pointer h-fit w-fit [&>*]:p-2 [&>*]:bg-primary text-black [&>*]:hover:bg-primary-hover rounded-full " > 
+                <SmallButton 
+                value="Resend link"
+                onClick={() => requestReset()} />
             </div>
-            <div className={fieldInputStyle(1)} onAnimationEnd={()=>handleShakes(1, false)}>
-                <FieldInput type="password" placeholder={passPlaceholder} pattern={passRegExpString} value={pass} onChange={setPass} />
+            }
+            <div className="flex flex-col w-[75%] gap-y-4 border-primary text-primary">
+                <div className={fieldInputStyle(0)} onAnimationEnd={()=>handleShakes(0, false)}>
+                    <FieldInput placeholder={oobCodePlaceholder} value={oobCode} onChange={handleOobFieldInput} invalid={oobInvalid} />
+                </div>
+                <div className={fieldInputStyle(1)} onAnimationEnd={()=>handleShakes(1, false)}>
+                    <FieldInput type="password" placeholder={passPlaceholder} pattern={passRegExpString} value={pass} onChange={setPass} />
+                </div>
+                <div className={fieldInputStyle(2)} onAnimationEnd={()=>handleShakes(2, false)}>
+                    <FieldInput type="password" placeholder={confPlaceholder} value={conf} onChange={setConf} invalid={!match} />
+                </div>
             </div>
-            <div className={fieldInputStyle(2)} onAnimationEnd={()=>handleShakes(2, false)}>
-                <FieldInput type="password" placeholder={confPlaceholder} value={conf} onChange={setConf} invalid={!match} />
-            </div>
-            <div className="flex flex-row justify-around w-full place-items-center">
-                <div className="font-bold text-sky-800 place-self cursor-pointer hover:bg-sky-100 p-4 rounded-full"
+            <div className="flex flex-row w-[75%] h-12 mb-7 justify-between items-center">
+                <div className="font-bold text-accent place-self cursor-pointer hover:bg-accent-hover p-2 rounded-full"
                     onClick={() => router.push("userPassword")}>
                     Go back
                 </div>
-
-                <div className="font-bold text-white [&>button]:p-1 [&>div]:p-1 aspect-[4/3] min-w-fit bg-sky-500 hover:bg-sky-600 cursor-pointer rounded-full">
+                <div className="font-bold text-black h-full w-24 [&>*]:bg-primary [&>*]:hover:bg-primary-hover">
                     <SmallButton value="Submit" isLoading={loading} onClick={() => {handleFormSubmit()}}/>
                 </div>
             </div>

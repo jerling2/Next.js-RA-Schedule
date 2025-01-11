@@ -6,7 +6,7 @@ export default function SignIn() {
     
     return (
         <div className="relative flex flex-row h-screen justify-center items-center">
-            <div className="relative flex flex-col min-w-[400px] w-1/4 aspect-square justify-between bg-background-2 shadow-color items-center rounded-2xl">
+            <div className="relative flex flex-col min-w-[400px] w-1/3 aspect-square justify-between bg-background-2 shadow-color items-center rounded-2xl">
                 <div className='text-5xl mt-7 font-bold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text'>
                     Welcome
                 </div>
