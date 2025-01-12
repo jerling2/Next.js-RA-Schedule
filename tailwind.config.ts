@@ -11,6 +11,7 @@ export default {
     extend: {
       colors: {
         invalid: 'var(--invalid)',
+        'invalid-hover': 'var(--invalid-hover)',
         focus: 'var(--focus)',
         primary: 'var(--primary)',
         'primary-hover': 'var(--primary-hover)',
@@ -33,7 +34,10 @@ export default {
       }, 
       boxShadow: {
         'direct': 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
-        'color': 'rgba(0, 0, 0, .4) 0px 0px 20px 15px, var(--secondary-25) -75px -75px 100px 10px, var(--accent-15) 75px 75px 100px 10px'
+        'color': 'rgba(0, 0, 0, .4) 0px 0px 20px 15px, var(--secondary-25) -75px -75px 100px 10px, var(--accent-15) 75px 75px 100px 10px',
+        'dashboard-header': 'rgba(0, 0, 0, .5) 0px 0px 15px 10px',
+        'icon': 'rgba(255, 255, 255, .5) 0px 2px 5px 2px inset, rgba(0, 0, 0, .5) 0px -2px 5px 2px inset',
+        'popup': 'rgba(0, 0, 0, 1) 0px 5px 10px 2px, rgba(255, 255, 255, 0.2) 0px 2px 5px -2px inset'
       },
       keyframes: {
         shake: {

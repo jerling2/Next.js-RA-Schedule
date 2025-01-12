@@ -1,10 +1,12 @@
 "use client";
-import CogWheelIcon from '@/public/icons/cogwheel.svg';
-import HomeIcon from '@/public/icons/homeIcon.svg';
 import SmallButton from "./NextButton";
 import { useRouter } from "next/navigation";
 import { signOutUser } from '@/lib/client/auth';
-
+import PopUpMenu from '@/components/PopUpMenu';
+import { useEffect, useRef, useState } from 'react';
+import Avatar from '@/components/Avatar';
+import { useAuthContext } from './AuthProvider';
+import { deleteUser } from "firebase/auth";
 
 interface DashboardHeaderProps {
     currentPage?: string;
@@ -12,17 +14,63 @@ interface DashboardHeaderProps {
 
 export default function DashboardHeader({currentPage="home"}: DashboardHeaderProps) {
     const router = useRouter();
+    const iconRef = useRef<HTMLDivElement | null>(null);
+    const [currentTarget, setCurrentTarget] = useState<EventTarget & HTMLElement | undefined>(undefined);
+    const [avatarOutline, setAvatarOutline] = useState<boolean>(false);
+    const [deleteAccount, setDeleteAccount] = useState<number>(0);
+    const [deleteMessage, setDeleteMessage] = useState<string>('Delete Account');
+    const { user } = useAuthContext();
+
+    const handleAccountDelete = () => {
+        setDeleteAccount((prev) => {
+            return (prev+1);
+        });
+    }
+
+    const handleOnRender = (render: boolean) => {
+        if (!render) {
+            setCurrentTarget(undefined);
+            setAvatarOutline(false);
+            setDeleteAccount(0);
+        }
+    }
+
+    useEffect(() => {
+        if (currentTarget === iconRef.current) {
+            setAvatarOutline(true);
+        }
+    }, [iconRef, currentTarget]);
+
+    useEffect(() => {
+        if (deleteAccount === 0) {
+            setDeleteMessage("Delete Account");
+        } else if (deleteAccount === 1) {
+            setDeleteMessage("Sure?");
+        } else if (deleteAccount === 2) {
+            if (user === null) {
+                return router.push("/signIn/userIdentifier");
+            } 
+            deleteUser(user);
+            signOutUser();
+            router.push("/");
+        }
+    }, [deleteAccount])
+
     return (
-        <div className="relative flex flex-col justify-center place-items-end px-4 w-full h-[12%] min-h-[50px] bg-slate-50 drop-shadow-lg">
-            <div className="flex flex-row place-items-center gap-x-5">
-                <div className="[&>button]:p-1 [&>div]:p-1">
-                    <SmallButton value="Sign out" onClick={()=>{signOutUser(); router.push("/")}}/>
-                </div>
-                {currentPage === "home" && <CogWheelIcon className='w-10 h-10 hover:animate-spin cursor-pointer text-sky-500'
-                     onClick={() => router.push("/dashboard/settings")} />}
-                {currentPage === "settings" && <HomeIcon className='w-10 h-10 hover:animate-pulse cursor-pointer text-sky-500'
-                     onClick={() => router.push("/dashboard")} />}
-            </div>
+        <>
+        <div className="relative flex items-center justify-end bg-background-2 w-full min-h-[40px] aspect-[24/1] shadow-dashboard-header">
+            <Avatar ref={iconRef} focused={avatarOutline} onTarget={setCurrentTarget}/>
         </div>
+        <div className='static [&>*]:py-4 [&>*]:px-2 [&>*]:bg-background-2 [&>*]:shadow-popup'>
+            <PopUpMenu offsetX={0} offsetY={48} currentTarget={currentTarget} onRender={handleOnRender}>
+                <div className='text-black px-1 [&>*]:text-base bg-primary hover:bg-primary-hover min-w-[80px] aspect-[3/1] rounded-full transition transition-all duration-200'>
+                    <SmallButton value="Sign Out" onClick={()=>{signOutUser(); router.push("/")}}/>
+                </div>
+                <div className='text-black px-1 mt-4 [&>*]:text-base text-black font-bold bg-invalid hover:bg-invalid-hover min-w-[130px] aspect-[3/1] rounded-full transition transition-all duration-200'>
+                    <SmallButton value={deleteMessage} onClick={handleAccountDelete}/>
+                </div>
+            </PopUpMenu>
+        </div>
+        </>
     )
 }

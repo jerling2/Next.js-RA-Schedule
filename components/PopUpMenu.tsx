@@ -65,16 +65,15 @@ export default function PopUpMenu({
         <div
             ref={menuRef}           
             style={{
-                top: `${optCoords[0]+offsetX}px`,
-                left: `${optCoords[1]+offsetY}px`
+                top: `${optCoords[0]+offsetY}px`,
+                left: `${optCoords[1]+offsetX}px`
             }}
-            className='absolute bg-white rounded-md shadow-direct'>
-            <div className="relative py-3 [&>*]:px-8 [&>*]:text-lg">
+            className='absolute rounded-md'>
+            <div className="relative">
                 {children}
             </div>
         </div>}
-       
-        {!render && <div/>}
+        {!render && <></>}
         </>
     );
 }
