@@ -4,8 +4,9 @@ import XCircle from "@/public/icons/xCircle.svg"
 import CheckCircle from "@/public/icons/checkCircle.svg"
 import ChevronDown from "@/public/icons/chevronDown.svg"
 import ChevronUp from "@/public/icons/chevronUp.svg"
+import { PriorityProvider, TermPriority, WeekPriority } from "@/components/PriorityTools";
 import { Accordion, renderAccordionType } from "@/components/Accordion";
-import { useContext, createContext, useEffect } from 'react';
+import { useContext, createContext } from 'react';
 
 const AccordionElementContext = createContext<boolean>(false);
 
@@ -53,38 +54,40 @@ export default function Document() {
         <div className="relative flex flex-col w-screen h-screen [&>*]:px-dynamic-container">
             <DashboardHeader />
             <div className="relative flex justify-center min-w-fit">
-                <Accordion 
-                    className="min-w-[800px] h-fit bg-background-2 overflow-hidden mt-7 rounded-xl"
-                    render={renderAccordion}
-                    headers={[
-                        <HeaderComponent checked={false} header="Weekly Preferences" />,
-                        <HeaderComponent checked={true} header="Week 1" />,
-                        <HeaderComponent checked={true} header="Week 2" />,
-                        <HeaderComponent checked={true} header="Week 3" />,
-                        <HeaderComponent checked={true} header="Week 4" />,
-                        <HeaderComponent checked={true} header="Week 5" />,
-                        <HeaderComponent checked={true} header="Week 6" />,
-                        <HeaderComponent checked={true} header="Week 7" />,
-                        <HeaderComponent checked={true} header="Week 8" />,
-                        <HeaderComponent checked={true} header="Week 9" />,
-                        <HeaderComponent checked={true} header="Week 10" />,
-                        <HeaderComponent checked={true} header="Week 11" />,
-                    ]}
-                    contents={[
-                        <div>test 1</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>,
-                        <div>test 2</div>
-                    ]}
-                />
+                <PriorityProvider>
+                    <Accordion 
+                        className="min-w-[800px] h-fit bg-background-2 overflow-hidden mt-7 rounded-xl"
+                        render={renderAccordion}
+                        headers={[
+                            <HeaderComponent checked={false} header="Weekly Preferences" />,
+                            <HeaderComponent checked={true} header="Week 1" />,
+                            <HeaderComponent checked={true} header="Week 2" />,
+                            <HeaderComponent checked={true} header="Week 3" />,
+                            <HeaderComponent checked={true} header="Week 4" />,
+                            <HeaderComponent checked={true} header="Week 5" />,
+                            <HeaderComponent checked={true} header="Week 6" />,
+                            <HeaderComponent checked={true} header="Week 7" />,
+                            <HeaderComponent checked={true} header="Week 8" />,
+                            <HeaderComponent checked={true} header="Week 9" />,
+                            <HeaderComponent checked={true} header="Week 10" />,
+                            <HeaderComponent checked={true} header="Week 11" />,
+                        ]}
+                        contents={[
+                            <TermPriority termId="term-priorities" className="bg-red-500"/>,
+                            <WeekPriority weekId="week-1-priorities" />,
+                            <WeekPriority weekId="week-2-priorities" />,
+                            <WeekPriority weekId="week-3-priorities" />,
+                            <WeekPriority weekId="week-4-priorities" />,
+                            <WeekPriority weekId="week-5-priorities" />,
+                            <WeekPriority weekId="week-6-priorities" />,
+                            <WeekPriority weekId="week-7-priorities" />,
+                            <WeekPriority weekId="week-8-priorities" />,
+                            <WeekPriority weekId="week-9-priorities" />,
+                            <WeekPriority weekId="week-10-priorities" />,
+                            <WeekPriority weekId="week-11-priorities" />
+                        ]}
+                    />
+                </PriorityProvider>
             </div>
         </div>
     );
