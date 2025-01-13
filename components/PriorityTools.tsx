@@ -154,7 +154,7 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
                         const weekNumber = i * weeksPerRow + k + 1;
                         return (
                             weekNumber <= numWeeks && 
-                            <div key={k}>
+                            <div key={k} className='row header'>
                                 Week {weekNumber}
                             </div>
                         );
@@ -255,7 +255,7 @@ export function WeekPriority({ weekId, className='' }: WeekPriorityProps) {
         <div className={`grid grid-cols-8 ${className}`}>
             <div className='empty row header'></div>
             {Array.from({ length: 7 }, (_, index) =>
-                <div key={index}>
+                <div key={index} className='row header'>
                     {NumToDay[index]}
                 </div>
             )}
