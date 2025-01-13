@@ -61,7 +61,7 @@ export default function DashboardHeader({currentPage="home"}: DashboardHeaderPro
         <div className="relative flex items-center justify-end bg-background-2 w-full min-h-[40px] aspect-[24/1] shadow-dashboard-header">
             <Avatar ref={iconRef} focused={avatarOutline} onTarget={setCurrentTarget}/>
         </div>
-        <div className='static [&>*]:py-4 [&>*]:px-2 [&>*]:bg-background-2 [&>*]:shadow-popup'>
+        <div className='z-20 static [&>*]:py-4 [&>*]:px-2 [&>*]:bg-background-2 [&>*]:shadow-popup'>
             <PopUpMenu offsetX={0} offsetY={48} currentTarget={currentTarget} onRender={handleOnRender}>
                 <div className='text-black px-1 [&>*]:text-base bg-primary hover:bg-primary-hover min-w-[80px] aspect-[3/1] rounded-full transition transition-all duration-200'>
                     <SmallButton value="Sign Out" onClick={()=>{signOutUser(); router.push("/")}}/>

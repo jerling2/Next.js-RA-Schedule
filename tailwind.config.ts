@@ -33,11 +33,12 @@ export default {
         'dynamic-container': 'clamp(16px, 12%, 100vw)' //< using 100vw to denote "max->infinity".
       }, 
       boxShadow: {
-        'direct': 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
+        'direct': 'rgba(0, 0, 0, 0.3) 0px 10px 20px',
         'color': 'rgba(0, 0, 0, .4) 0px 0px 20px 15px, var(--secondary-25) -75px -75px 100px 10px, var(--accent-15) 75px 75px 100px 10px',
         'dashboard-header': 'rgba(0, 0, 0, .5) 0px 0px 15px 10px',
-        'icon': 'rgba(255, 255, 255, .5) 0px 2px 5px 2px inset, rgba(0, 0, 0, .5) 0px -2px 5px 2px inset',
-        'popup': 'rgba(0, 0, 0, 1) 0px 5px 10px 2px, rgba(255, 255, 255, 0.2) 0px 2px 5px -2px inset'
+        'icon': 'rgba(255, 255, 255, .5) 0px 2px 5px 2px inset, rgba(0, 0, 0, .25) 0px -2px 5px 2px inset',
+        'popup': 'rgba(0, 0, 0, 1) 0px 5px 10px 2px, rgba(255, 255, 255, 0.2) 0px 2px 5px -2px inset',
+        'strobe': 'var(--secondary) -10px 10px 30px 50px, rgba(255, 0, 255, .1) -10px -10px 30px 50px, rgba(255, 255, 0, .8) 10px -10px 10px 20px, var(--accent) 10px 10px 30px 50px'
       },
       keyframes: {
         shake: {
@@ -50,11 +51,17 @@ export default {
         moveOffScreen: {
           '0%': {transform: 'translateX(0)'},
           '100%': { transform: 'translateX(-100vw)'}
+        },
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         }
+        
       },
       animation: {
         shake: 'shake 0.5s ease-in-out',
-        'move-left': 'moveOffScreen linear'
+        'move-left': 'moveOffScreen linear',
+        'slow-spin': 'spin 10s linear infinite'
       },
     },
   },
