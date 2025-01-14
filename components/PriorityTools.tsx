@@ -30,8 +30,12 @@ interface PriorityBoxProps {
         min: number;
         max: number;
         empty: number;
+        shadow?: string;
+        opacity?: number;
+        intensity?: number;
     }
     onPrioritychange: (updatedPriority: number) => void;
+    className?: string;
 }
 
 interface TermPriorityProps {
@@ -69,7 +73,9 @@ export const usePriorityContext: UsePriorityContext = () => {
     return [priorityData, setPriorityData];
 }
 
-export function PriorityBox({ priority, prioritySchema, onPrioritychange }: PriorityBoxProps) {
+export function PriorityBox(
+    { priority, prioritySchema, onPrioritychange, className=''}: PriorityBoxProps
+) {
     const { min, max, empty } = prioritySchema;
     const handleClick = (e: MouseEvent) => {
         e.preventDefault()
@@ -92,12 +98,22 @@ export function PriorityBox({ priority, prioritySchema, onPrioritychange }: Prio
             onPrioritychange(updatedPriority);
         }
     }
+
     
+    const shadow = prioritySchema && prioritySchema['shadow'] ? prioritySchema['shadow'].replace(
+        '%%', `${prioritySchema['opacity']}`).replace('%%', `${prioritySchema['intensity']}`) : '';
+
     return (
         <div 
-        className='select-none cursor-pointer bg-blue-500'
+        style={{
+            boxShadow: shadow
+        }}
+        className={`priority-box relative select-none cursor-pointer w-[30px] h-[30px]
+        place-self-center p-0 flex justify-center items-center bg-background-1 border
+        border-background-3 border-2`}
         onContextMenu={handleClick} //< for right clicks.
-        onClick={handleClick}>{priority}
+        onClick={handleClick}>
+            {priority !== empty && priority}
         </div>
 
     );
@@ -111,6 +127,7 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
     const [localPriorityData, setLocalPriorityData] = useState<number[]>(
         Array(numWeeks * 2).fill(EMPTY)
     );
+
     const prioritySchema = {
         min: 1,
         max: numWeeks,
@@ -140,12 +157,19 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
         }); 
     }, [localPriorityData]);
 
+
+
     return (
         <div 
         style={{
             gridTemplateColumns: `repeat(${weeksPerRow + 1}, minmax(0, 1fr))`
         }}
-        className={`grid ${className}`}>
+        className={`relative grid ${className} bg-background-2 [&>.row.header]:bg-background-3 p-7
+        [&>.row.header]:py-1 [&>.row.header]:w-stretch [&>.row.header]:shadow-direct-b box-border
+        gap-y-2 [&>.row.header]:text-center [&>.row.label]:bg-clip-text
+        [&>.row.label]:text-transparent [&>.row.label]:bg-gradient-to-r
+        [&>.row.label.secondary]:from-cyan-500 [&>.row.label.secondary]:to-blue-500 
+        [&>.row.label.primary]:from-orange-500 [&>.row.label.primary]:to-red-500`}>
             {Array.from({ length: numBlocks }, (_, i) => (
                 <Fragment key={i}>
                     {/* Add one empty space to the start of the header row. */}
@@ -168,18 +192,24 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
                         );
                     })}
                     {/* Primary row */}
-                    <div className='row primary-label'>
+                    <div className='row primary label'>
                         Primary
                     </div>
                     {Array.from({ length: weeksPerRow }, (_, k) => {
                         const weekNumber = i * weeksPerRow + k + 1;
                         const index = weekNumber - 1;
+                        const priority = localPriorityData[index];
                         return (
                             weekNumber <= numWeeks && 
                             <PriorityBox
                                 key={k}
-                                priority={localPriorityData[index]}
-                                prioritySchema={prioritySchema}
+                                priority={priority}
+                                prioritySchema={{
+                                    ...prioritySchema,
+                                    shadow: 'rgba(255, 255, 0, %%) 0px 0px 3px %%px inset',
+                                    opacity: priority !== EMPTY ? 1 - (priority / numWeeks) : 0,
+                                    intensity: priority !== EMPTY ? 3 * (1 - (priority / numWeeks)) : 0
+                                }}
                                 onPrioritychange={
                                     (value) => handleLocalPriorityChange(index, value)
                                 }
@@ -195,18 +225,24 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
                         );
                     })}
                     {/* Secondary row */}
-                    <div className='row secondary-label'>
+                    <div className='row secondary label'>
                         Secondary
                     </div>
                     {Array.from({ length: weeksPerRow }, (_, k) => {
                         const weekNumber = i * weeksPerRow + k + 1;
                         const index = numWeeks + weekNumber - 1;
+                        const priority = localPriorityData[index];
                         return (
                             weekNumber <= numWeeks && 
                             <PriorityBox
                                 key={k}
-                                priority={localPriorityData[index]}
-                                prioritySchema={prioritySchema}
+                                priority={priority}
+                                prioritySchema={{
+                                    ...prioritySchema,
+                                    shadow: 'rgba(6, 182, 212, %%) 0px 0px 3px %%px inset',
+                                    opacity:  priority !== EMPTY ? 1.2 - (priority / numWeeks) : 0,
+                                    intensity: priority !== EMPTY ? 3 * (1 - (priority / numWeeks)) : 0
+                                }}
                                 onPrioritychange={
                                     (value) => handleLocalPriorityChange(index, value)
                                 }
@@ -252,34 +288,60 @@ export function WeekPriority({ weekId, className='' }: WeekPriorityProps) {
     }, [localPriorityData]);
 
     return (
-        <div className={`grid grid-cols-8 ${className}`}>
+        <div className={`grid grid-cols-8 ${className} bg-background-2 p-7
+        [&>.row.header]:bg-background-3 [&>.row.header]:py-1 [&>.row.header]:w-stretch
+        [&>.row.header]:shadow-direct-b gap-y-2 [&>.row.header]:text-center
+        [&>.row.label]:bg-clip-text [&>.row.label]:text-transparent [&>.row.label]:bg-gradient-to-r
+        [&>.row.label.secondary]:from-cyan-500 [&>.row.label.secondary]:to-blue-500 
+        [&>.row.label.primary]:from-orange-500 [&>.row.label.primary]:to-red-500`}>
             <div className='empty row header'></div>
             {Array.from({ length: 7 }, (_, index) =>
                 <div key={index} className='row header'>
                     {NumToDay[index]}
                 </div>
             )}
-            <div className='row primary-label'>
+            <div className='row primary label'>
                 primary
             </div>
-            {Array.from({ length: 7 }, (_, index) =>
-                <PriorityBox
-                    key={index}
-                    priority={localPriorityData[index]}
-                    prioritySchema={prioritySchema}
-                    onPrioritychange={(value) => handleLocalPriorityChange(index, value)}
-                />
+            {Array.from({ length: 7 }, (_, index) => {
+                const priority = localPriorityData[index];
+                return (
+                    <PriorityBox
+                        key={index}
+                        priority={priority}
+                        prioritySchema={{
+                            ...prioritySchema,
+                            shadow: 'rgba(255, 255, 0, %%) 0px 0px 3px %%px inset',
+                            opacity:  priority !== EMPTY ? 1 - (priority / 7) : 0,
+                            intensity: priority !== EMPTY ? 3 * (1 - (priority / 7)) : 0,
+                        }}
+                        onPrioritychange={
+                            (value) => handleLocalPriorityChange(index, value)
+                        }
+                    />
+                )}
             )}
-            <div className='row secondary-label'>
+            <div className='row secondary label'>
                 secondary
             </div>
-            {Array.from({ length: 7 }, (_, index) =>
-                <PriorityBox
-                    key={index + 7}
-                    priority={localPriorityData[index + 7]}
-                    prioritySchema={prioritySchema}
-                    onPrioritychange={(value) => handleLocalPriorityChange(index + 7, value)}
-                />
+            {Array.from({ length: 7 }, (_, iter) => {
+                const index = iter + 7;
+                const priority = localPriorityData[index];
+                return (
+                    <PriorityBox
+                        key={index}
+                        priority={priority}
+                        prioritySchema={{
+                            ...prioritySchema,
+                            shadow: 'rgba(6, 182, 212, %%) 0px 0px 3px %%px inset',
+                            opacity:  priority !== EMPTY ? 1.2 - (priority / 7) : 0,
+                            intensity: priority !== EMPTY ? 3 * (1 - (priority / 7)) : 0,
+                        }}
+                        onPrioritychange={
+                            (value) => handleLocalPriorityChange(index, value)
+                        }
+                    />
+                )}
             )}
         </div>
     );

@@ -6,7 +6,8 @@ import ChevronDown from "@/public/icons/chevronDown.svg"
 import ChevronUp from "@/public/icons/chevronUp.svg"
 import { PriorityProvider, TermPriority, WeekPriority } from "@/components/PriorityTools";
 import { Accordion, renderAccordionType } from "@/components/Accordion";
-import { useContext, createContext } from 'react';
+import { useContext, createContext, useRef, useEffect } from 'react';
+import type { AnimationEvent } from 'react';
 
 const AccordionElementContext = createContext<boolean>(false);
 
@@ -33,30 +34,59 @@ function HeaderComponent({ checked, header }: HeaderComponentProps) {
 }
 
 const renderAccordion: renderAccordionType = (header, content, isExpanded, onClick, index) => {
+    const accordionElementRef = useRef<HTMLDivElement | null>(null);
+
+    // Make sure the element stays closed after the closing animation plays.
+    const handleCloseAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+        if (e.animationName.startsWith('accordionClose') && accordionElementRef.current) {
+            accordionElementRef.current.style.height = '0px';
+        } 
+    }
+
+    // Make sure the element stays open after the opening animation plays.
+    const handleAccordionClick = () => {
+        if (!isExpanded && accordionElementRef.current) {
+            accordionElementRef.current.style.height = 'auto';
+        }
+    }
+
+    const getChildHeight = (): number => {
+        if (!accordionElementRef.current) {
+            return 0
+        }
+        return accordionElementRef.current.children[0].clientHeight ?? 0;
+    }
+
     return (
         <AccordionElementContext.Provider value={isExpanded}>
             {index !== 0 && <hr className="border-background-4"/>}
-            <div className={`flex items-center h-12 bg-background-3 select-none cursor-pointer ${isExpanded ? '!bg-blue-500' : ''}`}
-                onClick={onClick}>
+            <div className={`flex items-center h-12 bg-background-3 select-none cursor-pointer ${isExpanded ? '!bg-secondary' : ''}`}
+                onClick={() => {onClick(); handleAccordionClick()}}>
                 {header}
             </div>
-            {isExpanded && 
-            <div className='transition transition-all duration-1000 select-none'>
+            <div 
+                ref={accordionElementRef}
+                style={{
+                    height: '0px',
+                }}
+                // The classname is a bit hacked together and very specific to the content size of the particular according i'm rendering.
+                // Keyframes are difficult to generate dynamically so I have two predifined keyframes which I'm applying by filtering based on child's content height.
+                className={`${isExpanded ? `${getChildHeight() > 300 ? 'animate-accordion-open-400' : 'animate-accordion-open-200'} overflow-hidden transition transition-all select-none h-auto` : `${getChildHeight() > 300 ? 'animate-accordion-close-400' : 'animate-accordion-close-200'} transition transition-all select-none overflow-hidden`}`}
+                onAnimationEnd={(e) => handleCloseAnimationEnd(e)}>
                 {content}
-            </div>}
+            </div>
         </AccordionElementContext.Provider>
     );
 }
 
 export default function Document() {
-    
     return (
-        <div className="relative flex flex-col w-screen h-screen [&>*]:px-dynamic-container">
+        <div className="relative flex flex-col w-screen h-[100%] [&>*]:px-dynamic-container">
             <DashboardHeader />
             <div className="relative flex justify-center min-w-fit">
                 <PriorityProvider>
                     <Accordion 
-                        className="min-w-[800px] h-fit bg-background-2 overflow-hidden mt-7 rounded-xl"
+                        className="min-w-[800px] bg-background-2 overflow-hidden my-16 rounded-xl"
                         render={renderAccordion}
                         headers={[
                             <HeaderComponent checked={false} header="Weekly Preferences" />,
@@ -73,7 +103,7 @@ export default function Document() {
                             <HeaderComponent checked={true} header="Week 11" />,
                         ]}
                         contents={[
-                            <TermPriority termId="term-priorities" className="bg-red-500"/>,
+                            <TermPriority termId="term-priorities" />,
                             <WeekPriority weekId="week-1-priorities" />,
                             <WeekPriority weekId="week-2-priorities" />,
                             <WeekPriority weekId="week-3-priorities" />,
