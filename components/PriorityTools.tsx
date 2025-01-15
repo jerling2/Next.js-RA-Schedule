@@ -199,7 +199,7 @@ export function PriorityBox(
     useEffect(()=>{
         if (shiftKey && hovering) {
             setCopyStyle('!cursor-copy border-green-500');
-        } else if (!!copyStyle && (!shiftKey || !hovering)) {
+        } else if (!!copyStyle) {
             setCopyStyle('');
         }
     }, [shiftKey, hovering])
@@ -257,17 +257,45 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
     const numWeeks = schema && schema['numWeeks'] ? schema['numWeeks'] : 11;
     const weeksPerRow = schema && schema['numWeeks'] ? schema['numWeeks'] : 5;
     const numBlocks = Math.ceil(numWeeks / weeksPerRow);
+    const [cliboardEnabled, setClipboardEnabled] = useState<boolean>(false);
+    const [shiftKey, setShiftKey] = useState<boolean>(false);
+    const [hoverCoords, setHoverCoords] = useState<['row' | 'col' | null, number | null]>([null,null]);
+    const [prevHoverCoords, setPrevHoverCoords] = useState<['row' | 'col' | null, number | null]>([null,null]);
     const [globalPriorityData, setGlobalPriorityData] = usePriorityContext();
     const [localPriorityData, setLocalPriorityData] = useState<number[]>(
         Array(numWeeks * 2).fill(EMPTY)
     );
+    const [handleMouseLeave, setHandleMouseLeave] = useState<{(): void}>(()=>()=>{});
+    const [handleMouseEnter, setHandleMouseEnter] = useState<{(rowOrCol: string, index: number):void}>(
+        () => (rowOrCol: number, index: number)=>{}
+    );
+    const [copyStyle, setCopyStyle] = useState<{
+        ['row']: string[],
+        ['col']: string[]
+    }>({
+        row: Array(numBlocks * 2).fill(''), //< 2 rows per block (primary & secondary).
+        col: Array(numWeeks).fill('')
+    });
     const prioritySchema = {
         min: 1,
         max: numWeeks,
         empty: EMPTY,
     }
+    const handleKeyUp = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftKey(false);
+        }
+    }
+    const handleKeyDown = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftKey(true);
+        }    
+    }
     try {
         const [priorityClipboardData, setPriorityClipboardData] = usePriorityClipboardContext();
+        if (!cliboardEnabled) {
+            setClipboardEnabled(true);
+        }
         var handleRowCopy = (blockIter: number, rowIter: number) => {
             const index = blockIter * weeksPerRow + rowIter * numWeeks;
             const numElements = index % numWeeks === numWeeks - 1 ? numWeeks % weeksPerRow : weeksPerRow;
@@ -322,7 +350,6 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
         var handleColPaste = (blockIter: number, colIter: number) => {};
     }
 
-
     type ClickOn = "row" | "col";
     const handleClick = (e: MouseEvent, clickOn: ClickOn, block: number, index: number) => {
         e.preventDefault();
@@ -347,12 +374,60 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
             return updatedLocalPriorityData;
         });
     };
-    
+
     useEffect(() => {
         if (globalPriorityData.hasOwnProperty(termId)) {
             setLocalPriorityData(globalPriorityData[termId]);
         }
     }, []);
+
+    useEffect(() => {
+        if (!cliboardEnabled) {
+            return;
+        }
+        window.addEventListener("keyup", handleKeyUp);
+        window.addEventListener("keydown", handleKeyDown);
+        setHandleMouseEnter(()=>(rowOrCol: 'row' | 'col', index: number)=>{
+            setHoverCoords([rowOrCol, index]);
+        })
+        setHandleMouseLeave(()=>()=>{
+            setHoverCoords([null, null]);
+        })
+        return () => {
+            window.removeEventListener("keyup", handleKeyUp);
+            window.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [cliboardEnabled])
+
+    const cleanupLastStyle = () => {
+        if (prevHoverCoords[0] !== null && prevHoverCoords[1] !== null) {
+            const key = prevHoverCoords[0];
+            const index = prevHoverCoords[1];
+            setCopyStyle((prev) => {
+                const updatedCopyStyle = {...prev};
+                updatedCopyStyle[key][index] = "";
+                return updatedCopyStyle;
+            });
+            setPrevHoverCoords([null, null]);
+        }
+    }
+
+    useEffect(() => {
+        if (shiftKey && hoverCoords[0] !== null && hoverCoords[1] !== null) {
+            cleanupLastStyle();
+            const key = hoverCoords[0];
+            const index = hoverCoords[1];
+            setCopyStyle((prev) => {
+                const updatedCopyStyle = {...prev};
+                updatedCopyStyle[key][index] = "cursor-copy outline outline-green-500 outline-2 z-10";
+                return updatedCopyStyle;
+            });
+            setPrevHoverCoords([key, index]);
+        } else if (prevHoverCoords[0] !== null && prevHoverCoords[1] !== null) {
+            cleanupLastStyle();
+        }
+           
+    }, [shiftKey, hoverCoords])
 
     useEffect(() => {
         if (localPriorityData === globalPriorityData[termId]) {
@@ -394,8 +469,10 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
                         const weekNumber = i * weeksPerRow + k + 1;
                         return (
                             weekNumber <= numWeeks && 
-                            <div key={k} 
-                                className='row header'
+                            <div key={k}
+                                onMouseEnter={() => handleMouseEnter('col', weekNumber-1)}
+                                onMouseLeave={handleMouseLeave} 
+                                className={`row header ${copyStyle['col'][weekNumber-1]}`}
                                 onClick={(e: MouseEvent) => handleClick(e, "col", i, k)}
                                 onContextMenu={(e: MouseEvent) => handleClick(e, "col", i, k)}>
                                 Week {weekNumber}
@@ -411,7 +488,9 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
                         );
                     })}
                     {/* Primary row */}
-                    <div className='row primary label'
+                    <div className={`row primary label ${copyStyle['row'][i * 2]}`}
+                        onMouseEnter={() => handleMouseEnter('row', i * 2)}
+                        onMouseLeave={handleMouseLeave} 
                         onClick={(e: MouseEvent) => handleClick(e, "row", i, 0)}
                         onContextMenu={(e: MouseEvent) => handleClick(e, "row", i, 0)}>
                         Primary
@@ -446,7 +525,9 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
                         );
                     })}
                     {/* Secondary row */}
-                    <div className='row secondary label'
+                    <div className={`row secondary label ${copyStyle['row'][i * 2 + 1]}`}
+                        onMouseEnter={() => handleMouseEnter('row', i * 2 + 1)}
+                        onMouseLeave={handleMouseLeave}
                         onClick={(e: MouseEvent) => handleClick(e, "row", i, 1)}
                         onContextMenu={(e: MouseEvent) => handleClick(e, "row", i, 1)}>
                         Secondary
