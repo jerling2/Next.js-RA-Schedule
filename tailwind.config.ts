@@ -34,24 +34,13 @@ export default {
       }, 
       boxShadow: {
         'direct': 'rgba(0, 0, 0, 0.3) 0px 10px 20px',
+        'green-highlight': 'rgb(34, 197, 94) 0 0 1px 2px inset, rgb(34, 197, 94) 0 0 5px 2px inset',
         'direct-b': 'rgba(0, 0, 0, 0.3) 0px 4px 1px -1px',
         'color': 'rgba(0, 0, 0, .4) 0px 0px 20px 15px, var(--secondary-25) -75px -75px 100px 10px, var(--accent-15) 75px 75px 100px 10px',
         'dashboard-header': 'rgba(0, 0, 0, .5) 0px 0px 15px 10px',
         'icon': 'rgba(255, 255, 255, .5) 0px 2px 5px 2px inset, rgba(0, 0, 0, .25) 0px -2px 5px 2px inset',
         'popup': 'rgba(0, 0, 0, 1) 0px 5px 10px 2px, rgba(255, 255, 255, 0.2) 0px 2px 5px -2px inset',
         'strobe': 'var(--secondary) -10px 10px 30px 50px, rgba(255, 0, 255, .1) -10px -10px 30px 50px, rgba(255, 255, 0, .8) 10px -10px 10px 20px, var(--accent) 10px 10px 30px 50px',
-        'priority-box-primary-1': 'rgba(255, 255, 0, 0.05) 0px 0px 6px 1px inset',
-        'priority-box-primary-2': 'rgba(255, 255, 0, 0.10) 0px 0px 6px 1px inset',
-        'priority-box-primary-3': 'rgba(255, 255, 0, 0.15) 0px 0px 6px 1px inset',
-        'priority-box-primary-4': 'rgba(255, 255, 0, 0.20) 0px 0px 6px 1px inset',
-        'priority-box-primary-5': 'rgba(255, 255, 0, 0.25) 0px 0px 6px 1px inset',
-        'priority-box-primary-6': 'rgba(255, 255, 0, 0.30) 0px 0px 6px 1px inset',
-        'priority-box-primary-7': 'rgba(255, 255, 0, 0.35) 0px 0px 6px 1px inset',
-        'priority-box-primary-8': 'rgba(255, 255, 0, 0.40) 0px 0px 6px 1px inset',
-        'priority-box-primary-9': 'rgba(255, 255, 0, 0.45) 0px 0px 6px 1px inset',
-        'priority-box-primary-10': 'rgba(255, 255, 0, 0.50) 0px 0px 6px 1px inset',
-        'priority-box-primary-11': 'rgba(255, 255, 0, 0.55) 0px 0px 6px 1px inset',
-
       },
       keyframes: {
         shake: {

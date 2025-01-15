@@ -6,8 +6,9 @@ import ChevronDown from "@/public/icons/chevronDown.svg"
 import ChevronUp from "@/public/icons/chevronUp.svg"
 import { PriorityProvider, PriorityClipboardProvider, TermPriority, WeekPriority, usePriorityContext, usePriorityClipboardContext, LEFT_CLICK, RIGHT_CLICK } from "@/components/PriorityTools";
 import { Accordion, renderAccordionType } from "@/components/Accordion";
-import { useContext, createContext, useRef } from 'react';
+import { useContext, createContext, useRef, useState, useEffect } from 'react';
 import type { AnimationEvent, MouseEvent } from 'react';
+type DOMKeyboardEvent = KeyboardEvent;
 
 const AccordionElementContext = createContext<boolean>(false);
 
@@ -47,12 +48,13 @@ function HeaderComponent({ checked, header, foreignKey='' }: HeaderComponentProp
     }
 
     return (
-        <div className="flex flex-row w-full justify-between"
+        <div className="relative flex flex-row w-full justify-between"
         onClick={(e: MouseEvent) => handleClick(e)}
         onContextMenu={(e: MouseEvent) => handleClick(e)}>
             <div className="flex flex-row items-center">
                 {!checked && <XCircle className="w-[32px] h-[32px] mx-7" />}
                 {checked && <CheckCircle className="w-[32px] h-[32px] mx-7" />}
+                
                 <div className="ml-2 text-xl font-bold">
                     {header}
                 </div>
@@ -65,33 +67,71 @@ function HeaderComponent({ checked, header, foreignKey='' }: HeaderComponentProp
 
 const renderAccordion: renderAccordionType = (header, content, isExpanded, onClick, index) => {
     const accordionElementRef = useRef<HTMLDivElement | null>(null);
+    const [contentCollapsed, setContentCollapsed] = useState<boolean>(true);
+    const [childHeight, setChildHeight] = useState<number>(0);
+    const [mouseEnter, setMouseEnter] = useState<boolean>(false);
+    const [shiftPress, setShiftPress] = useState<boolean>(false);
+    const [copyOutlineStyle, setCopyOutlineStyle] = useState<{[key: string]: string}>({});
 
-    // Make sure the element stays closed after the closing animation plays.
     const handleCloseAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
         if (e.animationName.startsWith('accordionClose') && accordionElementRef.current) {
             accordionElementRef.current.style.height = '0px';
+            setContentCollapsed(true);
         } 
-    }
+    };
 
-    // Make sure the element stays open after the opening animation plays.
-    const handleAccordionClick = (e: MouseEvent) => {
-        if (!isExpanded && accordionElementRef.current && !e.shiftKey) {
+    const handleKeyDown = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftPress(true);
+        }
+    };
+
+    const handleKeyUp = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftPress(false);
+        }
+    };
+
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+    }, [])
+
+
+    useEffect(() => {
+        if (isExpanded && accordionElementRef.current) {
             accordionElementRef.current.style.height = 'auto';
+            setContentCollapsed(false);
         }
-    }
+    }, [isExpanded]);
 
-    const getChildHeight = (): number => {
-        if (!accordionElementRef.current) {
-            return 0
+    useEffect(() => {
+        if (accordionElementRef.current) {
+            setChildHeight(accordionElementRef.current.children[0].clientHeight ?? 0);
         }
-        return accordionElementRef.current.children[0].clientHeight ?? 0;
-    }
+    }, [accordionElementRef])
+
+    useEffect(() => {
+        if (shiftPress && mouseEnter) {
+            setCopyOutlineStyle({
+                boxShadow: 'rgb(34, 197, 94) 0 0 1px 2px inset, rgb(34, 197, 94) 0 0 2px 2px inset',
+                cursor: 'copy'
+            });
+        } else {
+            setCopyOutlineStyle({cursor: 'pointer'});
+        }
+    }, [shiftPress, mouseEnter])
 
     return (
         <AccordionElementContext.Provider value={isExpanded}>
             {index !== 0 && <hr className="border-background-4"/>}
-            <div className={`flex items-center h-12 bg-background-3 select-none cursor-pointer ${isExpanded ? '!bg-secondary' : ''}`}
-                onClick={(e) => {onClick(e); handleAccordionClick(e)}}>
+            <div
+                onMouseEnter={() => setMouseEnter(true)} 
+                onMouseLeave={() => setMouseEnter(false)}
+                className={`flex ${index === 0 ? 'rounded-t-xl' : ''} ${index === 11 && contentCollapsed ? 'rounded-b-xl' : ''} items-center h-12 bg-background-3 select-none ${isExpanded ? '!bg-secondary' : ''}`}
+                style={copyOutlineStyle}
+                onClick={(e) => {onClick(e)}}>
                 {header}
             </div>
             <div 
@@ -101,7 +141,7 @@ const renderAccordion: renderAccordionType = (header, content, isExpanded, onCli
                 }}
                 // The classname is a bit hacked together and very specific to the content size of the particular according i'm rendering.
                 // Keyframes are difficult to generate dynamically so I have two predifined keyframes which I'm applying by filtering based on child's content height.
-                className={`${isExpanded ? `${getChildHeight() > 300 ? 'animate-accordion-open-400' : 'animate-accordion-open-200'} overflow-hidden transition transition-all select-none h-auto` : `${getChildHeight() > 300 ? 'animate-accordion-close-400' : 'animate-accordion-close-200'} transition transition-all select-none overflow-hidden`}`}
+                className={`${isExpanded ? `${childHeight > 300 ? 'animate-accordion-open-400' : 'animate-accordion-open-200'} overflow-hidden transition transition-all select-none h-auto` : `${childHeight > 300 ? 'animate-accordion-close-400' : 'animate-accordion-close-200'} transition transition-all select-none overflow-hidden`}`}
                 onAnimationEnd={(e) => handleCloseAnimationEnd(e)}>
                 {content}
             </div>
