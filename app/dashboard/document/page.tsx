@@ -4,22 +4,52 @@ import XCircle from "@/public/icons/xCircle.svg"
 import CheckCircle from "@/public/icons/checkCircle.svg"
 import ChevronDown from "@/public/icons/chevronDown.svg"
 import ChevronUp from "@/public/icons/chevronUp.svg"
-import { PriorityProvider, TermPriority, WeekPriority } from "@/components/PriorityTools";
+import { PriorityProvider, PriorityClipboardProvider, TermPriority, WeekPriority, usePriorityContext, usePriorityClipboardContext, LEFT_CLICK, RIGHT_CLICK } from "@/components/PriorityTools";
 import { Accordion, renderAccordionType } from "@/components/Accordion";
-import { useContext, createContext, useRef, useEffect } from 'react';
-import type { AnimationEvent } from 'react';
+import { useContext, createContext, useRef } from 'react';
+import type { AnimationEvent, MouseEvent } from 'react';
 
 const AccordionElementContext = createContext<boolean>(false);
 
 interface HeaderComponentProps {
     checked: boolean;
     header: string;
+    foreignKey?: string;
 }
 
-function HeaderComponent({ checked, header }: HeaderComponentProps) {
+function HeaderComponent({ checked, header, foreignKey='' }: HeaderComponentProps) {
     const isExpanded = useContext(AccordionElementContext);
+    const [globalPriorityData, setGlobalPriorityData] = usePriorityContext();
+    const [priorityClipboardData, setPriorityClipboardData] = usePriorityClipboardContext();
+
+    const handleClick = (e: MouseEvent) => {
+        e.preventDefault();
+        if (!e.shiftKey) {
+            return;
+        }
+        if (foreignKey.startsWith('week') && e.button === LEFT_CLICK) {
+            const clipboardData = priorityClipboardData['weekTbl'];
+            if (clipboardData === undefined) {
+                return;
+            } 
+            setGlobalPriorityData((prev) => {
+                const updatedGlobalPriorityData = {...prev};
+                updatedGlobalPriorityData[foreignKey] = clipboardData;
+                return updatedGlobalPriorityData;
+            });
+        } else if (foreignKey.startsWith('week') && e.button === RIGHT_CLICK) {
+            setPriorityClipboardData((prev) => {
+                const updatedClipboard = {...prev};
+                updatedClipboard['weekTbl'] = globalPriorityData[foreignKey];
+                return updatedClipboard;
+            });
+        }
+    }
+
     return (
-        <div className="flex flex-row w-full justify-between">
+        <div className="flex flex-row w-full justify-between"
+        onClick={(e: MouseEvent) => handleClick(e)}
+        onContextMenu={(e: MouseEvent) => handleClick(e)}>
             <div className="flex flex-row items-center">
                 {!checked && <XCircle className="w-[32px] h-[32px] mx-7" />}
                 {checked && <CheckCircle className="w-[32px] h-[32px] mx-7" />}
@@ -44,8 +74,8 @@ const renderAccordion: renderAccordionType = (header, content, isExpanded, onCli
     }
 
     // Make sure the element stays open after the opening animation plays.
-    const handleAccordionClick = () => {
-        if (!isExpanded && accordionElementRef.current) {
+    const handleAccordionClick = (e: MouseEvent) => {
+        if (!isExpanded && accordionElementRef.current && !e.shiftKey) {
             accordionElementRef.current.style.height = 'auto';
         }
     }
@@ -61,7 +91,7 @@ const renderAccordion: renderAccordionType = (header, content, isExpanded, onCli
         <AccordionElementContext.Provider value={isExpanded}>
             {index !== 0 && <hr className="border-background-4"/>}
             <div className={`flex items-center h-12 bg-background-3 select-none cursor-pointer ${isExpanded ? '!bg-secondary' : ''}`}
-                onClick={() => {onClick(); handleAccordionClick()}}>
+                onClick={(e) => {onClick(e); handleAccordionClick(e)}}>
                 {header}
             </div>
             <div 
@@ -84,40 +114,43 @@ export default function Document() {
         <div className="relative flex flex-col w-screen h-[100%] [&>*]:px-dynamic-container">
             <DashboardHeader />
             <div className="relative flex justify-center min-w-fit">
-                <PriorityProvider>
-                    <Accordion 
-                        className="min-w-[800px] bg-background-2 overflow-hidden my-16 rounded-xl"
-                        render={renderAccordion}
-                        headers={[
-                            <HeaderComponent checked={false} header="Weekly Preferences" />,
-                            <HeaderComponent checked={true} header="Week 1" />,
-                            <HeaderComponent checked={true} header="Week 2" />,
-                            <HeaderComponent checked={true} header="Week 3" />,
-                            <HeaderComponent checked={true} header="Week 4" />,
-                            <HeaderComponent checked={true} header="Week 5" />,
-                            <HeaderComponent checked={true} header="Week 6" />,
-                            <HeaderComponent checked={true} header="Week 7" />,
-                            <HeaderComponent checked={true} header="Week 8" />,
-                            <HeaderComponent checked={true} header="Week 9" />,
-                            <HeaderComponent checked={true} header="Week 10" />,
-                            <HeaderComponent checked={true} header="Week 11" />,
-                        ]}
-                        contents={[
-                            <TermPriority termId="term-priorities" />,
-                            <WeekPriority weekId="week-1-priorities" />,
-                            <WeekPriority weekId="week-2-priorities" />,
-                            <WeekPriority weekId="week-3-priorities" />,
-                            <WeekPriority weekId="week-4-priorities" />,
-                            <WeekPriority weekId="week-5-priorities" />,
-                            <WeekPriority weekId="week-6-priorities" />,
-                            <WeekPriority weekId="week-7-priorities" />,
-                            <WeekPriority weekId="week-8-priorities" />,
-                            <WeekPriority weekId="week-9-priorities" />,
-                            <WeekPriority weekId="week-10-priorities" />,
-                            <WeekPriority weekId="week-11-priorities" />
-                        ]}
-                    />
-                </PriorityProvider>
+                <PriorityClipboardProvider>
+                    <PriorityProvider>
+                        <Accordion 
+                            className="overflow-hidden min-w-[800px] my-16 rounded-xl 
+                                bg-background-2"
+                            render={renderAccordion}
+                            headers={[
+                                <HeaderComponent checked={false} header="Weekly Preferences" foreignKey="term-priorities" />,
+                                <HeaderComponent checked={true} header="Week 1" foreignKey="week-1-priorities" />,
+                                <HeaderComponent checked={true} header="Week 2" foreignKey="week-2-priorities" />,
+                                <HeaderComponent checked={true} header="Week 3" foreignKey="week-3-priorities" />,
+                                <HeaderComponent checked={true} header="Week 4" foreignKey="week-4-priorities" />,
+                                <HeaderComponent checked={true} header="Week 5" foreignKey="week-5-priorities" />,
+                                <HeaderComponent checked={true} header="Week 6" foreignKey="week-6-priorities" />,
+                                <HeaderComponent checked={true} header="Week 7" foreignKey="week-7-priorities" />,
+                                <HeaderComponent checked={true} header="Week 8" foreignKey="week-8-priorities" />,
+                                <HeaderComponent checked={true} header="Week 9" foreignKey="week-9-priorities" />,
+                                <HeaderComponent checked={true} header="Week 10" foreignKey="week-10-priorities" />,
+                                <HeaderComponent checked={true} header="Week 11" foreignKey="week-11-priorities" />,
+                            ]}
+                            contents={[
+                                <TermPriority termId="term-priorities" />,
+                                <WeekPriority weekId="week-1-priorities" />,
+                                <WeekPriority weekId="week-2-priorities" />,
+                                <WeekPriority weekId="week-3-priorities" />,
+                                <WeekPriority weekId="week-4-priorities" />,
+                                <WeekPriority weekId="week-5-priorities" />,
+                                <WeekPriority weekId="week-6-priorities" />,
+                                <WeekPriority weekId="week-7-priorities" />,
+                                <WeekPriority weekId="week-8-priorities" />,
+                                <WeekPriority weekId="week-9-priorities" />,
+                                <WeekPriority weekId="week-10-priorities" />,
+                                <WeekPriority weekId="week-11-priorities" />
+                            ]}
+                        />
+                    </PriorityProvider>
+                </PriorityClipboardProvider>
             </div>
         </div>
     );
