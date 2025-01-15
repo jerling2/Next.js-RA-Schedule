@@ -562,9 +562,39 @@ export function TermPriority({ termId, schema, className='' }: TermPriorityProps
 export function WeekPriority({ weekId, className='' }: WeekPriorityProps) {
     const [globalPriorityData, setGlobalPriorityData] = usePriorityContext();
     const [localPriorityData, setLocalPriorityData] = useState<number[]>(Array(14).fill(EMPTY));
+    const [clipboardEnabled, setClipboardEnabled] = useState<boolean>(false);
+    const [shiftKey, setShiftKey] = useState<boolean>(false);
+    const [hoverCoords, setHoverCoords] = useState<['row' | 'col' | null, number | null]>([null,null]);
+    const [prevHoverCoords, setPrevHoverCoords] = useState<['row' | 'col' | null, number | null]>([null,null]);
+    const [handleMouseLeave, setHandleMouseLeave] = useState<{(): void}>(()=>()=>{});
+    const [handleMouseEnter, setHandleMouseEnter] = useState<{(rowOrCol: string, index: number):void}>(
+        () => (rowOrCol: number, index: number)=>{}
+    );
+    const [copyStyle, setCopyStyle] = useState<{
+        ['row']: string[],
+        ['col']: string[]
+    }>({
+        row: Array(2).fill(''), //< 2 rows per block (primary & secondary).
+        col: Array(7).fill('')
+    });
+
+    const handleKeyUp = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftKey(false);
+        }
+    }
+
+    const handleKeyDown = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftKey(true);
+        }
+    }
 
     try {
         const [priorityClipboardData, setPriorityClipboardData] = usePriorityClipboardContext();
+        if (!clipboardEnabled) {
+            setClipboardEnabled(true);
+        }
         var handleRowCopy = (index: number) => {
             const rowData = localPriorityData.slice(index*7, index + 7);
             setPriorityClipboardData((clipboard) => {
@@ -603,11 +633,57 @@ export function WeekPriority({ weekId, className='' }: WeekPriorityProps) {
             }
         };
     } catch {
-        var handleRowCopy = (index: number) => {};
-        var handleColCopy = (index: number) => {};
-        var handleRowPaste = (index: number) => {};
-        var handleColPaste = (index: number) => {};
+        if(clipboardEnabled) {
+            setClipboardEnabled(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!clipboardEnabled) {
+            return;
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        setHandleMouseEnter(()=>(rowOrCol: 'row' | 'col', index: number)=>{
+            setHoverCoords([rowOrCol, index]);
+        });
+        setHandleMouseLeave(()=>()=>{
+            setHoverCoords([null, null]);
+        });
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        }
+    }, [clipboardEnabled]);
+
+    const cleanUpLastStyle = () => {
+        if (prevHoverCoords[0] !== null && prevHoverCoords[1] !== null) {
+            const key = prevHoverCoords[0];            
+            const index = prevHoverCoords[1];            
+            setCopyStyle((prev) => {
+                const updatedCopyStyle = {...prev};
+                updatedCopyStyle[key][index] = '';
+                return updatedCopyStyle;
+            });
+            setPrevHoverCoords([null, null]);
+        }
     }
+
+    useEffect(() => {
+        if (shiftKey && hoverCoords[0] !== null && hoverCoords[1] !== null) {
+            cleanUpLastStyle();
+            const key = hoverCoords[0];
+            const index = hoverCoords[1];
+            setCopyStyle((prev) => {
+                const updatedCopyStyle = {...prev};
+                updatedCopyStyle[key][index] = 'cursor-copy outline outline-2 outline-green-500 z-10';
+                return updatedCopyStyle;
+            });
+            setPrevHoverCoords(hoverCoords);
+        } else {
+            cleanUpLastStyle();
+        }
+    }, [shiftKey, hoverCoords]);
 
     type ClickOn = "row" | "col";
     const handleClick = (e: MouseEvent, clickOn: ClickOn, index: number) => {
@@ -678,13 +754,17 @@ export function WeekPriority({ weekId, className='' }: WeekPriorityProps) {
             <div className='empty row header'></div>
             {Array.from({ length: 7 }, (_, index) =>
                 <div key={index}
-                    className='row header'
+                    className={`row header ${copyStyle['col'][index]}`}
+                    onMouseEnter={() => handleMouseEnter('col', index)}
+                    onMouseLeave={handleMouseLeave}
                     onClick={(e: MouseEvent) => handleClick(e, "col", index)}
                     onContextMenu={(e: MouseEvent) => handleClick(e, "col", index)}>
                     {NumToDay[index]}
                 </div>
             )}
-            <div className='row primary label'
+            <div className={`row primary label ${copyStyle['row'][0]}`}
+                onMouseEnter={() => handleMouseEnter('row', 0)}
+                onMouseLeave={handleMouseLeave}
                 onClick={(e: MouseEvent) => handleClick(e, "row", 0)}
                 onContextMenu={(e: MouseEvent) => handleClick(e, "row", 0)}>
                 primary
@@ -707,7 +787,9 @@ export function WeekPriority({ weekId, className='' }: WeekPriorityProps) {
                     />
                 )}
             )}
-            <div className='row secondary label'
+            <div className={`row secondary label ${copyStyle['row'][1]}`}
+                onMouseEnter={() => handleMouseEnter('row', 1)}
+                onMouseLeave={handleMouseLeave}
                 onClick={(e: MouseEvent) => handleClick(e, "row", 1)}
                 onContextMenu={(e: MouseEvent) => handleClick(e, "row", 1)}>
                 secondary
