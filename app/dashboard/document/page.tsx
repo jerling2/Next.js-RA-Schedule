@@ -4,10 +4,12 @@ import XCircle from "@/public/icons/xCircle.svg"
 import CheckCircle from "@/public/icons/checkCircle.svg"
 import ChevronDown from "@/public/icons/chevronDown.svg"
 import ChevronUp from "@/public/icons/chevronUp.svg"
+import { useRouter } from "next/navigation";
 import { PriorityProvider, PriorityClipboardProvider, TermPriority, WeekPriority, usePriorityContext, usePriorityClipboardContext, LEFT_CLICK, RIGHT_CLICK } from "@/components/PriorityTools";
 import { Accordion, renderAccordionType } from "@/components/Accordion";
 import { useContext, createContext, useRef, useState, useEffect } from 'react';
 import type { AnimationEvent, MouseEvent } from 'react';
+import SmallButton from "@/components/NextButton";
 type DOMKeyboardEvent = KeyboardEvent;
 
 const AccordionElementContext = createContext<boolean>(false);
@@ -154,7 +156,7 @@ function AccordionContainer() {
      * */
     const x = usePriorityContext()[0];
     return <Accordion 
-        className="overflow-hidden min-w-[800px] my-16 rounded-xl 
+        className="overflow-hidden min-w-[800px] my-10 rounded-xl 
             bg-background-2"
         render={renderAccordion}
         headers={[
@@ -188,14 +190,67 @@ function AccordionContainer() {
     />
 }
 
+function SubmitButtonContainer() {
+    const router = useRouter();
+    const [errorMsg, setErrorMsg] = useState<string>('');
+    const x = usePriorityContext()[0];
+
+    useEffect(() => {
+        setErrorMsg('');
+    }, [x]);
+
+    const handleClick = () => {
+        if (!x['term-priorities'] || x['term-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Weekly Preferences');
+        } else if (!x['week-1-priorities'] || x['week-1-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 1');
+        } else if (!x['week-2-priorities'] || x['week-2-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 2');
+        } else if (!x['week-3-priorities'] || x['week-3-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 3');
+        } else if (!x['week-4-priorities'] || x['week-4-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 4');
+        } else if (!x['week-5-priorities'] || x['week-5-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 5');
+        } else if (!x['week-6-priorities'] || x['week-6-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 6');
+        } else if (!x['week-7-priorities'] || x['week-7-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 7');
+        } else if (!x['week-8-priorities'] || x['week-8-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 8');
+        } else if (!x['week-9-priorities'] || x['week-9-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 9');
+        } else if (!x['week-10-priorities'] || x['week-10-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 10');
+        } else if (!x['week-11-priorities'] || x['week-11-priorities'].some(y => y === -1)) {
+            return setErrorMsg('* Missing an entry in Week 11');
+        }
+        setErrorMsg('');
+        alert("You've reached the end of the demo. Thank you for testing it :) ")
+        router.push('/dashboard');
+    }
+
+    return (
+        <div>
+            {!!errorMsg && <div className="text-invalid font-bold text-xl place-self-center mb-4">
+                {errorMsg}
+            </div>}
+            <div className="[&>*]:bg-primary place-self-center [&>*]:hover:bg-primary-hover [&>*]:text-black [&>*]:w-[200px] [&>*]:h-[50px] [&>*]:mb-20">
+                <SmallButton value="Submit" onClick={handleClick}/>
+            </div>
+        </div>
+    )
+}
+
 export default function Document() {
     return (
         <div className="relative flex flex-col w-screen h-[100%] [&>*]:px-dynamic-container">
             <DashboardHeader />
-            <div className="relative flex justify-center min-w-fit">
+            <div className="relative flex flex-col justify-center min-w-fit">
                 <PriorityClipboardProvider>
                     <PriorityProvider>
                         <AccordionContainer />
+                        <SubmitButtonContainer />
                     </PriorityProvider>
                 </PriorityClipboardProvider>
             </div>
