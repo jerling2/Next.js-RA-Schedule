@@ -53,8 +53,7 @@ function HeaderComponent({ checked, header, foreignKey='' }: HeaderComponentProp
         onContextMenu={(e: MouseEvent) => handleClick(e)}>
             <div className="flex flex-row items-center">
                 {!checked && <XCircle className="w-[32px] h-[32px] mx-7" />}
-                {checked && <CheckCircle className="w-[32px] h-[32px] mx-7" />}
-                
+                {checked && <CheckCircle className="w-[32px] h-[32px] mx-7 text-green-500" />}
                 <div className="ml-2 text-xl font-bold">
                     {header}
                 </div>
@@ -92,12 +91,10 @@ const renderAccordion: renderAccordionType = (header, content, isExpanded, onCli
         }
     };
 
-
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('keyup', handleKeyUp);
     }, [])
-
 
     useEffect(() => {
         if (isExpanded && accordionElementRef.current) {
@@ -149,6 +146,48 @@ const renderAccordion: renderAccordionType = (header, content, isExpanded, onCli
     );
 }
 
+function AccordionContainer() {
+    /**
+     * Note to future self: this is an awful way of doing this because of the k * n complexity
+     * of iterating through all the lists whenever the global state changes. Please change this
+     * for the final version. Thank you!
+     * */
+    const x = usePriorityContext()[0];
+    return <Accordion 
+        className="overflow-hidden min-w-[800px] my-16 rounded-xl 
+            bg-background-2"
+        render={renderAccordion}
+        headers={[
+            <HeaderComponent checked={x['term-priorities']?.every(y => y !== -1) ?? false} header="Weekly Preferences" foreignKey="term-priorities" />,
+            <HeaderComponent checked={x['week-1-priorities']?.every(y => y !== -1) ?? false} header="Week 1" foreignKey="week-1-priorities" />,
+            <HeaderComponent checked={x['week-2-priorities']?.every(y => y !== -1) ?? false} header="Week 2" foreignKey="week-2-priorities" />,
+            <HeaderComponent checked={x['week-3-priorities']?.every(y => y !== -1) ?? false} header="Week 3" foreignKey="week-3-priorities" />,
+            <HeaderComponent checked={x['week-4-priorities']?.every(y => y !== -1) ?? false} header="Week 4" foreignKey="week-4-priorities" />,
+            <HeaderComponent checked={x['week-5-priorities']?.every(y => y !== -1) ?? false} header="Week 5" foreignKey="week-5-priorities" />,
+            <HeaderComponent checked={x['week-6-priorities']?.every(y => y !== -1) ?? false} header="Week 6" foreignKey="week-6-priorities" />,
+            <HeaderComponent checked={x['week-7-priorities']?.every(y => y !== -1) ?? false} header="Week 7" foreignKey="week-7-priorities" />,
+            <HeaderComponent checked={x['week-8-priorities']?.every(y => y !== -1) ?? false} header="Week 8" foreignKey="week-8-priorities" />,
+            <HeaderComponent checked={x['week-9-priorities']?.every(y => y !== -1) ?? false} header="Week 9" foreignKey="week-9-priorities" />,
+            <HeaderComponent checked={x['week-10-priorities']?.every(y => y !== -1) ?? false} header="Week 10" foreignKey="week-10-priorities" />,
+            <HeaderComponent checked={x['week-11-priorities']?.every(y => y !== -1) ?? false} header="Week 11" foreignKey="week-11-priorities" />,
+        ]}
+        contents={[
+            <TermPriority termId="term-priorities" />,
+            <WeekPriority weekId="week-1-priorities" />,
+            <WeekPriority weekId="week-2-priorities" />,
+            <WeekPriority weekId="week-3-priorities" />,
+            <WeekPriority weekId="week-4-priorities" />,
+            <WeekPriority weekId="week-5-priorities" />,
+            <WeekPriority weekId="week-6-priorities" />,
+            <WeekPriority weekId="week-7-priorities" />,
+            <WeekPriority weekId="week-8-priorities" />,
+            <WeekPriority weekId="week-9-priorities" />,
+            <WeekPriority weekId="week-10-priorities" />,
+            <WeekPriority weekId="week-11-priorities" />
+        ]}
+    />
+}
+
 export default function Document() {
     return (
         <div className="relative flex flex-col w-screen h-[100%] [&>*]:px-dynamic-container">
@@ -156,39 +195,7 @@ export default function Document() {
             <div className="relative flex justify-center min-w-fit">
                 <PriorityClipboardProvider>
                     <PriorityProvider>
-                        <Accordion 
-                            className="overflow-hidden min-w-[800px] my-16 rounded-xl 
-                                bg-background-2"
-                            render={renderAccordion}
-                            headers={[
-                                <HeaderComponent checked={false} header="Weekly Preferences" foreignKey="term-priorities" />,
-                                <HeaderComponent checked={true} header="Week 1" foreignKey="week-1-priorities" />,
-                                <HeaderComponent checked={true} header="Week 2" foreignKey="week-2-priorities" />,
-                                <HeaderComponent checked={true} header="Week 3" foreignKey="week-3-priorities" />,
-                                <HeaderComponent checked={true} header="Week 4" foreignKey="week-4-priorities" />,
-                                <HeaderComponent checked={true} header="Week 5" foreignKey="week-5-priorities" />,
-                                <HeaderComponent checked={true} header="Week 6" foreignKey="week-6-priorities" />,
-                                <HeaderComponent checked={true} header="Week 7" foreignKey="week-7-priorities" />,
-                                <HeaderComponent checked={true} header="Week 8" foreignKey="week-8-priorities" />,
-                                <HeaderComponent checked={true} header="Week 9" foreignKey="week-9-priorities" />,
-                                <HeaderComponent checked={true} header="Week 10" foreignKey="week-10-priorities" />,
-                                <HeaderComponent checked={true} header="Week 11" foreignKey="week-11-priorities" />,
-                            ]}
-                            contents={[
-                                <TermPriority termId="term-priorities" />,
-                                <WeekPriority weekId="week-1-priorities" />,
-                                <WeekPriority weekId="week-2-priorities" />,
-                                <WeekPriority weekId="week-3-priorities" />,
-                                <WeekPriority weekId="week-4-priorities" />,
-                                <WeekPriority weekId="week-5-priorities" />,
-                                <WeekPriority weekId="week-6-priorities" />,
-                                <WeekPriority weekId="week-7-priorities" />,
-                                <WeekPriority weekId="week-8-priorities" />,
-                                <WeekPriority weekId="week-9-priorities" />,
-                                <WeekPriority weekId="week-10-priorities" />,
-                                <WeekPriority weekId="week-11-priorities" />
-                            ]}
-                        />
+                        <AccordionContainer />
                     </PriorityProvider>
                 </PriorityClipboardProvider>
             </div>
