@@ -2,6 +2,7 @@
 import { createContext, useState, useContext, useEffect, Fragment } from 'react';
 import type { Dispatch, SetStateAction, ReactNode, MouseEvent } from 'react';
 
+type DOMKeyboardEvent = KeyboardEvent;
 export const LEFT_CLICK = 0;
 export const RIGHT_CLICK = 2;
 const EMPTY = -1;
@@ -128,9 +129,32 @@ export function PriorityBox(
     { priority, prioritySchema, onPrioritychange, className=''}: PriorityBoxProps
 ) {
     const { min, max, empty } = prioritySchema;
-   
+    const [cliboardEnabled, setClipboardEnabled] = useState<boolean>(false);
+    const [shiftKey, setShiftKey] = useState<boolean>(false);
+    const [hovering, setHovering] = useState<boolean>(false);
+    const [handleMouseEnter, setHandleMouseEnter] = useState<{(): void}>(()=>()=>{});
+    const [handleMouseLeave, setHandleMouseLeave] = useState<{(): void}>(()=>()=>{});
+    const [copyStyle, setCopyStyle] = useState<string>('');
+
+    const handlKeyUp = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftKey(false);
+        }
+    }
+
+    const handlKeyDown = (e: DOMKeyboardEvent) => {
+        if (e.key === "Shift") {
+            setShiftKey(true);
+        }
+    }
+    
     try {
         const [priorityClipboardData, setPriorityClipboardData] = usePriorityClipboardContext();
+
+        if (!cliboardEnabled) {
+            setClipboardEnabled(true);
+        }
+
         var handleCopy = (priority: number) => {
             setPriorityClipboardData((clipboard) => {
                 const updatedClipboard = {...clipboard};
@@ -138,16 +162,47 @@ export function PriorityBox(
                 return updatedClipboard;
             });
         }
+
         var handlePaste = () => {
             const pastedValue = priorityClipboardData['box'];
             if (pastedValue !== undefined && pastedValue >= min && pastedValue <= max) {
                 onPrioritychange(pastedValue);
             }
-        };
+        }
+
     } catch {
         var handleCopy = (priority: number) => {};
-        var handlePaste = () => {};
+        var handlePaste  = () => {};
     }
+
+    useEffect(() => {
+        if (!cliboardEnabled) {
+            return;
+        }
+
+        setHandleMouseEnter(()=>()=>{
+            setHovering(true);
+        });
+
+        setHandleMouseLeave(()=>()=>{
+            setHovering(false);
+        });
+
+        window.addEventListener("keydown", handlKeyDown);
+        window.addEventListener("keyup", handlKeyUp);
+        return () => {
+            window.removeEventListener("keydown", handlKeyDown);
+            window.removeEventListener("keyup", handlKeyUp);
+        }
+    }, [cliboardEnabled]);
+
+    useEffect(()=>{
+        if (shiftKey && hovering) {
+            setCopyStyle('!cursor-copy border-green-500');
+        } else if (!!copyStyle && (!shiftKey || !hovering)) {
+            setCopyStyle('');
+        }
+    }, [shiftKey, hovering])
 
     const handleClick = (e: MouseEvent) => {
         e.preventDefault()
@@ -155,6 +210,7 @@ export function PriorityBox(
             handlePaste();
         } else if (e.shiftKey && e.button === RIGHT_CLICK) {
             handleCopy(priority);
+
         }
         else if (e.button === LEFT_CLICK) {
             let updatedPriority = undefined;
@@ -175,7 +231,6 @@ export function PriorityBox(
             onPrioritychange(updatedPriority);
         }
     }
-
     
     const shadow = prioritySchema && prioritySchema['shadow'] ? prioritySchema['shadow'].replace(
         '%%', `${prioritySchema['opacity']}`).replace('%%', `${prioritySchema['intensity']}`) : '';
@@ -187,9 +242,11 @@ export function PriorityBox(
         }}
         className={`priority-box relative select-none cursor-pointer w-[30px] h-[30px]
         place-self-center p-0 flex justify-center items-center bg-background-1 border
-        border-background-3 border-2`}
+        border-background-3 border-2 ${copyStyle}`}
         onContextMenu={handleClick} //< for right clicks.
-        onClick={handleClick}>
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
             {priority !== empty && priority}
         </div>
 
