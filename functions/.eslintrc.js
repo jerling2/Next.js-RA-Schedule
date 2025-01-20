@@ -13,7 +13,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
   ],
   settings: {
-    "import/resolver:": {
+    "import/resolver": {
       "babel-module": {
         "config": "./.babelrc"
       }

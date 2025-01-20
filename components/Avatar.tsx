@@ -1,6 +1,6 @@
 "use client";
 
-import type { Ref, MouseEvent } from 'react';
+import type { Ref } from 'react';
 
 interface AvatarProps {
     ref?: Ref<HTMLDivElement>;

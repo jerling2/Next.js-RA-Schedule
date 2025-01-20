@@ -26,7 +26,7 @@ export default function PasswordSignIn () {
                 setError(false);
                 router.push("/");
             }
-        } catch (error: unknown) {
+        } catch {
             alert("Oops, something went wrong.");
             router.push("/");
         } finally {

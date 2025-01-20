@@ -8,7 +8,7 @@ import FieldInput from "@/components/FieldInput";
 import { FirebaseError } from "firebase/app";
 import SmallButton from "@/components/NextButton";
 
-export default function forgotPassword () {
+export default function ForgotPassword () {
     const router = useRouter();
     const { email } = useEmailContext();
     const [timeLeft, setTimeLeft] = useState<number>(0);

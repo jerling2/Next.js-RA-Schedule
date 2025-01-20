@@ -1,7 +1,7 @@
 "use client";
 
 type NativeMouseEvent = MouseEvent;
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { ReactNode } from "react";
 
 interface PopUpMenuProps {
@@ -43,7 +43,7 @@ export default function PopUpMenu({
         return () => {
           document.removeEventListener('click', handleClick);
         };
-    }, [render]);
+    }, [render, handleClick, onRender]);
 
     useEffect(() => {
         if (currentTarget === undefined) {

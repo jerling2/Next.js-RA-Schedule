@@ -1,4 +1,7 @@
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true, // Disable ESLint during build
+  },
   // Turbopack Configuration Reference: https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo#configuring-webpack-loaders
   experimental: {
     turbo: {

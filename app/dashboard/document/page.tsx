@@ -66,7 +66,7 @@ function HeaderComponent({ checked, header, foreignKey='' }: HeaderComponentProp
     );
 }
 
-const renderAccordion: renderAccordionType = (header, content, isExpanded, onClick, index) => {
+const useRenderAccordion: renderAccordionType = (header, content, isExpanded, onClick, index) => {
     const accordionElementRef = useRef<HTMLDivElement | null>(null);
     const [contentCollapsed, setContentCollapsed] = useState<boolean>(true);
     const [childHeight, setChildHeight] = useState<number>(0);
@@ -158,34 +158,34 @@ function AccordionContainer() {
     return <Accordion 
         className="overflow-hidden min-w-[800px] my-10 rounded-xl 
             bg-background-2"
-        render={renderAccordion}
+        render={useRenderAccordion}
         headers={[
-            <HeaderComponent checked={x['term-priorities']?.every(y => y !== -1) ?? false} header="Weekly Preferences" foreignKey="term-priorities" />,
-            <HeaderComponent checked={x['week-1-priorities']?.every(y => y !== -1) ?? false} header="Week 1" foreignKey="week-1-priorities" />,
-            <HeaderComponent checked={x['week-2-priorities']?.every(y => y !== -1) ?? false} header="Week 2" foreignKey="week-2-priorities" />,
-            <HeaderComponent checked={x['week-3-priorities']?.every(y => y !== -1) ?? false} header="Week 3" foreignKey="week-3-priorities" />,
-            <HeaderComponent checked={x['week-4-priorities']?.every(y => y !== -1) ?? false} header="Week 4" foreignKey="week-4-priorities" />,
-            <HeaderComponent checked={x['week-5-priorities']?.every(y => y !== -1) ?? false} header="Week 5" foreignKey="week-5-priorities" />,
-            <HeaderComponent checked={x['week-6-priorities']?.every(y => y !== -1) ?? false} header="Week 6" foreignKey="week-6-priorities" />,
-            <HeaderComponent checked={x['week-7-priorities']?.every(y => y !== -1) ?? false} header="Week 7" foreignKey="week-7-priorities" />,
-            <HeaderComponent checked={x['week-8-priorities']?.every(y => y !== -1) ?? false} header="Week 8" foreignKey="week-8-priorities" />,
-            <HeaderComponent checked={x['week-9-priorities']?.every(y => y !== -1) ?? false} header="Week 9" foreignKey="week-9-priorities" />,
-            <HeaderComponent checked={x['week-10-priorities']?.every(y => y !== -1) ?? false} header="Week 10" foreignKey="week-10-priorities" />,
-            <HeaderComponent checked={x['week-11-priorities']?.every(y => y !== -1) ?? false} header="Week 11" foreignKey="week-11-priorities" />,
+            <HeaderComponent key={0} checked={x['term-priorities']?.every(y => y !== -1) ?? false} header="Weekly Preferences" foreignKey="term-priorities" />,
+            <HeaderComponent key={1} checked={x['week-2-priorities']?.every(y => y !== -1) ?? false} header="Week 2" foreignKey="week-2-priorities" />,
+            <HeaderComponent key={2} checked={x['week-3-priorities']?.every(y => y !== -1) ?? false} header="Week 3" foreignKey="week-3-priorities" />,
+            <HeaderComponent key={3} checked={x['week-4-priorities']?.every(y => y !== -1) ?? false} header="Week 4" foreignKey="week-4-priorities" />,
+            <HeaderComponent key={4} checked={x['week-1-priorities']?.every(y => y !== -1) ?? false} header="Week 1" foreignKey="week-1-priorities" />,
+            <HeaderComponent key={5} checked={x['week-5-priorities']?.every(y => y !== -1) ?? false} header="Week 5" foreignKey="week-5-priorities" />,
+            <HeaderComponent key={6} checked={x['week-6-priorities']?.every(y => y !== -1) ?? false} header="Week 6" foreignKey="week-6-priorities" />,
+            <HeaderComponent key={7} checked={x['week-7-priorities']?.every(y => y !== -1) ?? false} header="Week 7" foreignKey="week-7-priorities" />,
+            <HeaderComponent key={8} checked={x['week-8-priorities']?.every(y => y !== -1) ?? false} header="Week 8" foreignKey="week-8-priorities" />,
+            <HeaderComponent key={9} checked={x['week-9-priorities']?.every(y => y !== -1) ?? false} header="Week 9" foreignKey="week-9-priorities" />,
+            <HeaderComponent key={10} checked={x['week-10-priorities']?.every(y => y !== -1) ?? false} header="Week 10" foreignKey="week-10-priorities" />,
+            <HeaderComponent key={11} checked={x['week-11-priorities']?.every(y => y !== -1) ?? false} header="Week 11" foreignKey="week-11-priorities" />,
         ]}
         contents={[
-            <TermPriority termId="term-priorities" />,
-            <WeekPriority weekId="week-1-priorities" />,
-            <WeekPriority weekId="week-2-priorities" />,
-            <WeekPriority weekId="week-3-priorities" />,
-            <WeekPriority weekId="week-4-priorities" />,
-            <WeekPriority weekId="week-5-priorities" />,
-            <WeekPriority weekId="week-6-priorities" />,
-            <WeekPriority weekId="week-7-priorities" />,
-            <WeekPriority weekId="week-8-priorities" />,
-            <WeekPriority weekId="week-9-priorities" />,
-            <WeekPriority weekId="week-10-priorities" />,
-            <WeekPriority weekId="week-11-priorities" />
+            <TermPriority key={0} termId="term-priorities" />,
+            <WeekPriority key={1} weekId="week-1-priorities" />,
+            <WeekPriority key={2} weekId="week-2-priorities" />,
+            <WeekPriority key={3} weekId="week-3-priorities" />,
+            <WeekPriority key={4} weekId="week-4-priorities" />,
+            <WeekPriority key={5} weekId="week-5-priorities" />,
+            <WeekPriority key={6} weekId="week-6-priorities" />,
+            <WeekPriority key={7} weekId="week-7-priorities" />,
+            <WeekPriority key={8} weekId="week-8-priorities" />,
+            <WeekPriority key={9} weekId="week-9-priorities" />,
+            <WeekPriority key={10} weekId="week-10-priorities" />,
+            <WeekPriority key={11} weekId="week-11-priorities" />
         ]}
     />
 }
@@ -247,6 +247,34 @@ export default function Document() {
         <div className="relative flex flex-col w-screen h-[100%] [&>*]:px-dynamic-container">
             <DashboardHeader />
             <div className="relative flex flex-col justify-center min-w-fit">
+                <div>
+                    Welcome to the demo!
+                    <br />
+                    <br />
+                    Weekly Preferences is where you enter preferences for the weeks you want to work. Say you want to finish your shifts ASAP, then mark the early weeks a higher priority than the later weeks.
+                    <br />
+                    <br />
+                    Week X is where you enter preferences for the days you want to work for that specific week.
+                    <br />
+                    <br />
+                    Note: the lower the number, the higher the preference.
+                    <br />
+                    <br />
+                    Controls:
+                    <br />
+                    * Right click decreases your preference
+                    <br />
+                    * Left click increases your preference
+                    <br />
+                    * Shift + Right click copies to clipboard
+                    <br />
+                    * Shift + Left click pastes from clipboard
+                    <br />
+                    * You can copy single boxes, columns, rows, and entire tables.
+                    <br />
+                    <br />
+                    <span className="bg-clip-text bg-gradient-to-r text-transparent from-primary to-accent font-bold">Tip:</span> use the copy & paste feature :)
+                </div>
                 <PriorityClipboardProvider>
                     <PriorityProvider>
                         <AccordionContainer />

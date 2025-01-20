@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, actionCodeSettings } from "@/lib/client/auth";
+import { auth } from "@/lib/client/auth";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import FieldInput from "@/components/FieldInput";

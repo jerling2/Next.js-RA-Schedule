@@ -126,7 +126,7 @@ export const usePriorityClipboardContext: UsePriorityClipboardContext = () => {
 }
 
 export function PriorityBox(
-    { priority, prioritySchema, onPrioritychange, className=''}: PriorityBoxProps
+    { priority, prioritySchema, onPrioritychange}: PriorityBoxProps
 ) {
     const { min, max, empty } = prioritySchema;
     const [cliboardEnabled, setClipboardEnabled] = useState<boolean>(false);

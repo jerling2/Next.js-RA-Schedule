@@ -29,6 +29,6 @@ export default function Home() {
     // User is logged in - attempt to go to dashboard.
     login(user);
 
-  }, [user, loading]);
+  }, [user, loading, router]);
 
 }

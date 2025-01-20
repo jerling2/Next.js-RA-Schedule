@@ -1,6 +1,5 @@
 "use client";
-import { useState } from 'react';
-import { TailSpin } from 'react-loader-spinner';
+// import { TailSpin } from 'react-loader-spinner';
 
 interface NextButtonProps {
     isLoading?: boolean;
@@ -24,9 +23,9 @@ export default function SmallButton({ value="Next", isLoading=false, onClick=()=
             <div className="flex w-full h-full place-items-center justify-center border-box
             rounded-full
             select-none cursor-default">
-                <TailSpin
+                {/* <TailSpin
                 color={'#FFFFFF'}
-                height={30} />
+                height={30} /> */}
             </div>
         );
     }

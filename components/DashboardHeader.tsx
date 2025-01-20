@@ -8,11 +8,9 @@ import Avatar from '@/components/Avatar';
 import { useAuthContext } from './AuthProvider';
 import { deleteUser } from "firebase/auth";
 
-interface DashboardHeaderProps {
-    currentPage?: string;
-}
 
-export default function DashboardHeader({currentPage="home"}: DashboardHeaderProps) {
+
+export default function DashboardHeader() {
     const router = useRouter();
     const iconRef = useRef<HTMLDivElement | null>(null);
     const [currentTarget, setCurrentTarget] = useState<EventTarget & HTMLElement | undefined>(undefined);
@@ -54,7 +52,7 @@ export default function DashboardHeader({currentPage="home"}: DashboardHeaderPro
             signOutUser();
             router.push("/");
         }
-    }, [deleteAccount])
+    }, [user, deleteAccount, router])
 
     return (
         <>

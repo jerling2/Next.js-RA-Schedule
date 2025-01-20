@@ -1,12 +1,19 @@
 "use client"
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { sendEmailVerification } from "firebase/auth";
 import { useAuthContext } from "@/components/AuthProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import SmallButton from "@/components/NextButton";
 
-
 export default function VerifyEmail() {
+    return (
+    <Suspense fallback={<div>loading...</div>}>
+        <VerifyEmailComponent />
+    </Suspense>
+    );
+}
+
+function VerifyEmailComponent() {
     const router = useRouter();
     const { user } = useAuthContext();
     const searchParams = useSearchParams();
@@ -46,7 +53,7 @@ export default function VerifyEmail() {
             setPollUser(!!user ? 5 : 0);
         }
         return () => clearInterval(pollTimer);
-    }, [user, pollUser]);
+    }, [user, pollUser, router]);
 
     const displayEmail = useCallback(() => {
         const params = new URLSearchParams(searchParams.toString());

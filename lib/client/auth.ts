@@ -7,10 +7,6 @@ import { User, ActionCodeSettings } from "firebase/auth";
 import { auth } from '@/lib/client/firebase';
 import { getIdToken, createUserWithEmailAndPassword, Auth, fetchSignInMethodsForEmail, signInWithEmailAndPassword, UserCredential, signOut} from 'firebase/auth';
 
-const actionCodeSettings: ActionCodeSettings = {
-    url: "http://localhost:3000"
-}
-
 type SignupEmail = (
     auth: Auth,
     email: string,
@@ -57,12 +53,14 @@ type CheckUserEmail = (
 
 const checkUserEmail: CheckUserEmail = async (email) => {
     try {
+        console.log(auth, email);
         const methods = await fetchSignInMethodsForEmail(auth, email);
+        console.log(methods)
         return (methods.length > 0);
     } catch (error: unknown) {
         if (!(error instanceof FirebaseError)) {
-            alert(error);
-        } 
+            alert(`firebase error: ${error}`);
+        }
         return false;
     }
 }
@@ -103,5 +101,5 @@ const signOutUser = async () => {
     }
 }
 
-export { auth, actionCodeSettings, fetchAuthToken, signupEmail, signinEmail, checkUserEmail, signOutUser };
+export { auth, fetchAuthToken, signupEmail, signinEmail, checkUserEmail, signOutUser };
 
