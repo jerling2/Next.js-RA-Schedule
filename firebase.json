@@ -1,71 +1,48 @@
 {
   "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "functions/**",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "source": "packages/web",
+    "public": "packages/web/public",
     "frameworksBackend": {
       "region": "us-west1"
     },
-    "headers": [
+    "rewrites": [
       {
         "source": "**",
-        "headers": [
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "*"
-          },
-          {
-            "key": "Access-Control-Allow-Credentials",
-            "value": "true"
-          }
-        ]
+        "function": "ssrnextjsraapp"
       }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/README.md",
+      "**/tsconfig.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/src/**",
+      "packages/functions/**"
+    ]
+  },
+  "functions": {
+    "source": "packages/functions",
+    "runtime": "nodejs18",
+    "ignore": [
+      "node_modules",
+      "tsconfig.json",
+      "src"
+    ],
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   },
   "emulators": {
     "auth": {
-      "port": 9099,
-      "blockingFunctions": {
-        "beforeCreate": true
-      }
+      "port": 9099
     },
-    "hosting": {
-      "port": 5001,
-      "watch": "."
+    "functions": {
+      "port": 5001
     },
     "ui": {
       "enabled": true
     },
-    "singleProjectMode": true,
-    "firestore": {
-      "port": 8080
-    },
-    "functions": {
-      "port": 5001
-    }
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
-    }
-  ]
+    "singleProjectMode": true
+  }
 }
