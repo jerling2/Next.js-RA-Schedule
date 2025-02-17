@@ -1,7 +1,6 @@
 {
   "hosting": {
     "source": "packages/web",
-    "public": "packages/web/public",
     "frameworksBackend": {
       "region": "us-west1"
     },
