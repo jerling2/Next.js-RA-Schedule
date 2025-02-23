@@ -1,10 +1,5 @@
-import type { DecodedIdToken } from "firebase-admin/auth";
 import { NextResponse } from 'next/server'
 
-export type ProtectedRoute = (
-    userCredentials: DecodedIdToken | undefined,
-    baseURL?: string | URL | '',
-) => NextResponse;
 
 export const adminDashboard: ProtectedRoute = (userCredentials, baseURL) => {
     if (userCredentials === undefined) {
@@ -24,6 +19,7 @@ export const adminDashboard: ProtectedRoute = (userCredentials, baseURL) => {
         { status: 401 }
     );
 };
+
 
 export const userDashboard: ProtectedRoute = (userCredentials, baseURL) => {
     if (userCredentials === undefined) { 

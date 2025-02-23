@@ -1,4 +1,4 @@
-import EmailContextProvider from "@/components/EmailProvider";
+import { EmailContextProvider } from "@/auth";
 
 export default function SignInLayout({
     children,

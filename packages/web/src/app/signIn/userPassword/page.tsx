@@ -1,11 +1,11 @@
 "use client";
-import { useEmailContext } from "@/components/EmailProvider";
-import FieldInput from "@/components/FieldInput";
-import SmallButton from "@/components/NextButton";
+import { useEmailContext } from "@/auth";
+import { FieldInput, SmallButton } from "@/ui";
+import { auth } from "@/client/firebase";
+import { signinEmail } from "@/client/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth, signinEmail } from "@/client/auth";
 
 export default function PasswordSignIn () {
     const {email} = useEmailContext();

@@ -1,12 +1,12 @@
 "use client";
 import { sendPasswordResetEmail, confirmPasswordReset } from "firebase/auth";
-import { auth, signinEmail } from "@/client/auth";
+import { auth } from "@/client/firebase";
+import { signinEmail } from "@/client/auth";
 import { useRouter } from "next/navigation";
-import { useEmailContext } from "@/components/EmailProvider";
+import { useEmailContext } from "@/auth";
 import { useState, useEffect } from "react";
-import FieldInput from "@/components/FieldInput";
+import { FieldInput, SmallButton } from "@/ui";
 import { FirebaseError } from "firebase/app";
-import SmallButton from "@/components/NextButton";
 
 export default function ForgotPassword () {
     const router = useRouter();

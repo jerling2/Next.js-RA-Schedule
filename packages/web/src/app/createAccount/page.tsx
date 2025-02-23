@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/client/auth";
+import { auth } from "@/client/firebase";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import FieldInput from "@/components/FieldInput";
-import SmallButton from "@/components/NextButton";
+import { FieldInput, SmallButton } from "@/ui";
 
 export default function CreateAccount() {
   const router = useRouter();

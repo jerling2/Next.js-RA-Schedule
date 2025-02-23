@@ -1,10 +1,9 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import FieldInput from '@/components/FieldInput';
-import SmallButton from '@/components/NextButton';
+import { FieldInput, SmallButton } from '@/ui';
 import { checkUserEmail } from "@/client/auth";
-import { useEmailContext } from '@/components/EmailProvider';
+import { useEmailContext } from '@/auth';
 
 export default function EmailSignIn() {
     const router = useRouter();

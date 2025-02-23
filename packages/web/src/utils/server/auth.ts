@@ -6,6 +6,7 @@ import * as Err from "@/server/error";
 import { ServerError } from "@/server/error";
 import { authTokenName, decodeJWTEndpoint } from "@/server/dotenv";
 
+
 const __getAuthToken = (cookies: RequestCookies): string => {
     const authToken = cookies.get(authTokenName)?.value;
     if (authToken === undefined) {
@@ -17,6 +18,7 @@ const __getAuthToken = (cookies: RequestCookies): string => {
     const cleanAuthToken = authToken.slice(7);
     return cleanAuthToken;
 }
+
 
 const __cloudDecode = async (authToken: string): Promise<DecodedIdToken> => {
     const response = await fetch(decodeJWTEndpoint, {
@@ -32,6 +34,7 @@ const __cloudDecode = async (authToken: string): Promise<DecodedIdToken> => {
     const decodedIdToken: DecodedIdToken = jsonResponse.data;
     return decodedIdToken;
 }
+
 
 export const getUserCredentials = async (cookies: RequestCookies): Promise<DecodedIdToken | undefined> => {
     try {

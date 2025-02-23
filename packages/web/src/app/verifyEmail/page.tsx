@@ -1,9 +1,9 @@
 "use client"
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { sendEmailVerification } from "firebase/auth";
-import { useAuthContext } from "@/components/AuthProvider";
+import { useAuthContext } from "@/auth";
+import { SmallButton } from "@/ui";
 import { useRouter, useSearchParams } from "next/navigation";
-import SmallButton from "@/components/NextButton";
 
 export default function VerifyEmail() {
     return (

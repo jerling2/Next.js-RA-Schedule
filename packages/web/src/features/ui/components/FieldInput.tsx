@@ -1,16 +1,5 @@
 "use client";
-
-interface TextInputProps {
-    type?: string;
-    placeholder?: string;
-    value?: string | undefined;
-    onChange?: (textInput: string) => void;
-    pattern?: string;
-    disabled?: boolean;
-    invalid?: boolean;
-};
-
-export default function TextInput({ type="text", placeholder="", value=undefined, onChange=()=>{}, pattern=".*", disabled=false, invalid=false}: TextInputProps) {
+export function FieldInput({ type="text", placeholder="", value=undefined, onChange=()=>{}, pattern=".*", disabled=false, invalid=false}: TextInputProps) {
     const inputInvalid = invalid ? 'border-invalid text-invalid' : 'border-inherit invalid:border-invalid focus:border-focus'
     const placeholderInvalid = invalid ? 'text-invalid' : 'text-inherit peer-invalid/input:text-invalid peer-focus/input:text-focus'
     const pseudoPlaceHolder = placeholder === "" ? "" : `.${placeholder}.`;

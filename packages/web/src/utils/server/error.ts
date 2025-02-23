@@ -1,8 +1,6 @@
-export interface ServerError extends Error {
+export class ServerError extends Error implements ServerError {
     code: string;
-}
 
-export class ServerError extends Error {
     constructor(message: string, code: string) {
         super(message);
         this.name = this.constructor.name;
@@ -11,11 +9,13 @@ export class ServerError extends Error {
     }
 }
 
+
 export class InvalidAuthToken extends ServerError {
     constructor(message: string) {
         super(message, 'AuthToken/Invalid');
     }
 }
+
 
 export class UndefinedEnvironment extends ServerError {
     constructor(message: string) {

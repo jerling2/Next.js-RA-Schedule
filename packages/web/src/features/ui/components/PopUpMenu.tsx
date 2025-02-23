@@ -1,19 +1,9 @@
 "use client";
-
-type NativeMouseEvent = MouseEvent;
 import { useState, useRef, useEffect } from "react";
-import type { ReactNode } from "react";
+import type { NativeMouseEvent } from "@/constants";
 
-interface PopUpMenuProps {
-    currentTarget?: EventTarget & HTMLElement  | undefined;
-    offsetX?: number;
-    offsetY?: number;
-    onRender: (render: boolean) => void;
-    children: ReactNode,
 
-}
-
-export default function PopUpMenu({ 
+export function PopUpMenu({ 
     currentTarget=undefined, offsetX=0, offsetY=0, onRender, children 
 }: PopUpMenuProps
 ) {

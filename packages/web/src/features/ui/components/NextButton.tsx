@@ -1,12 +1,5 @@
 "use client";
-// import { TailSpin } from 'react-loader-spinner';
-
-interface NextButtonProps {
-    isLoading?: boolean;
-    onClick?: () => void;
-    value?: string;
-}
-export default function SmallButton({ value="Next", isLoading=false, onClick=()=>{} }: NextButtonProps) {
+export function SmallButton({ value="Next", isLoading=false, onClick=()=>{} }: NextButtonProps) {
     if (!isLoading) {
         return (
             <button className="flex w-full h-full place-items-center justify-center border-box

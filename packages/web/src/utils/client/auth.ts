@@ -3,17 +3,17 @@
  */
 "use client";
 import { FirebaseError } from 'firebase/app';
-import { User, ActionCodeSettings } from "firebase/auth";
 import { auth } from '@/client/firebase';
-import { getIdToken, createUserWithEmailAndPassword, Auth, fetchSignInMethodsForEmail, signInWithEmailAndPassword, UserCredential, signOut} from 'firebase/auth';
+import { 
+    getIdToken, 
+    createUserWithEmailAndPassword, 
+    fetchSignInMethodsForEmail, 
+    signInWithEmailAndPassword, 
+    signOut
+} from 'firebase/auth';
 
-type SignupEmail = (
-    auth: Auth,
-    email: string,
-    password: string,
-) => void;
 
-const signupEmail: SignupEmail = async (auth, email, password) => {
+export const signupEmail: SignupEmail = async (auth, email, password) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: unknown) {
@@ -27,12 +27,8 @@ const signupEmail: SignupEmail = async (auth, email, password) => {
     }
 }
 
-type SigninEmail = (
-    email: string,
-    password: string,
-) => Promise<UserCredential | undefined>;
 
-const signinEmail: SigninEmail = async (email, password) => {
+export const signinEmail: SigninEmail = async (email, password) => {
     try {
         // await setPersistence(auth, browserSessionPersistence); //< Set browser persistance.
         return await signInWithEmailAndPassword(auth, email, password);
@@ -47,11 +43,8 @@ const signinEmail: SigninEmail = async (email, password) => {
     }
 }
 
-type CheckUserEmail = (
-    email: string,
-) => Promise<Boolean>;
 
-const checkUserEmail: CheckUserEmail = async (email) => {
+export const checkUserEmail: CheckUserEmail = async (email) => {
     try {
         console.log(auth, email);
         const methods = await fetchSignInMethodsForEmail(auth, email);
@@ -65,11 +58,8 @@ const checkUserEmail: CheckUserEmail = async (email) => {
     }
 }
 
-type FetchAuthToken = (
-    user: User, 
-) => Promise<boolean>;
 
-const fetchAuthToken: FetchAuthToken = async (user) => {
+export const fetchAuthToken: FetchAuthToken = async (user) => {
     try {
         const JWT = await getIdToken(user);
         const response = await fetch('/api/authenticate', {
@@ -89,7 +79,8 @@ const fetchAuthToken: FetchAuthToken = async (user) => {
     };
 }
 
-const signOutUser = async () => {
+
+export const signOutUser = async () => {
     try {
         await signOut(auth);
         await fetch('/api/signOut', {
@@ -100,6 +91,3 @@ const signOutUser = async () => {
         alert(`Uncaught error ${error}`);
     }
 }
-
-export { auth, fetchAuthToken, signupEmail, signinEmail, checkUserEmail, signOutUser };
-

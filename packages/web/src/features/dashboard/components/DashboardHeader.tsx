@@ -1,16 +1,14 @@
 "use client";
-import SmallButton from "./NextButton";
-import { useRouter } from "next/navigation";
-import { signOutUser } from '@/client/auth';
-import PopUpMenu from '@/components/PopUpMenu';
 import { useEffect, useRef, useState } from 'react';
-import Avatar from '@/components/Avatar';
-import { useAuthContext } from './AuthProvider';
+import { useRouter } from "next/navigation";
+import { SmallButton, PopUpMenu } from "@/ui";
 import { deleteUser } from "firebase/auth";
+import { signOutUser } from '@/client/auth';
+import { useAuthContext } from '@/auth';
+import { Avatar } from '@/dashboard';
 
 
-
-export default function DashboardHeader() {
+export function DashboardHeader() {
     const router = useRouter();
     const iconRef = useRef<HTMLDivElement | null>(null);
     const [currentTarget, setCurrentTarget] = useState<EventTarget & HTMLElement | undefined>(undefined);

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import { useAuthContext } from '@/components/AuthProvider';
+import { useAuthContext } from '@/auth';
 import { User } from 'firebase/auth';
 import { useEffect } from 'react';
 import { fetchAuthToken } from '@/client/auth';

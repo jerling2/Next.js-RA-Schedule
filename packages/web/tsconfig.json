@@ -25,8 +25,9 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
-      "@/*": ["src/"],
-      "@/components/*": ["src/components/*"],
+      "@/*": ["src/features/*/index.ts"],
+      "@/lib/hooks": ["src/utils/lib/hooks.ts"],
+      "@/constants": ["src/utils/lib/constants.ts"],
       "@/server/*": ["src/utils/server/*"],
       "@/client/*": ["src/utils/client/*"],
       "@/public/*": ["public/*"],

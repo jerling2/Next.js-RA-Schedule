@@ -1,5 +1,5 @@
 "use client";
-import DashboardHeader from "@/components/DashboardHeader";
+import { DashboardHeader } from "@/dashboard";
 import { useRouter } from "next/navigation";
 import PlusSign from "@/public/icons/plusSign.svg";
 

@@ -1,0 +1,3 @@
+interface KeyboardState {
+    shift: boolean;
+}
