@@ -24,7 +24,7 @@ export function PriorityBox({ initialState }: PriorityBoxProps) {
         ))
     }
 
-    // Update box shadow when the box's priority changes.
+    // Update the box shadow when the box's priority changes.
     useEffect(() => {
         const { shadowFormat, opacityFunction, intensityFunction } = boxState.activeStyleTemplate;
         const opacity = opacityFunction(priority);
@@ -33,7 +33,7 @@ export function PriorityBox({ initialState }: PriorityBoxProps) {
             updateBoxState('__shadow', shadow);
     }, [globalPriorities[key][blockIdx][index]]);
 
-    // Initialize boxState.focus
+    // Initialize boxState.__focus
     useEffect(() => {
         if (keyboardState.shift && boxState.__isHover) {
             updateBoxState('__focus', '!cursor-copy border-green-500');
@@ -42,10 +42,16 @@ export function PriorityBox({ initialState }: PriorityBoxProps) {
         }
     }, [keyboardState.shift, boxState.__isHover])
 
+    /** 
+     * Priority Box Interactions:
+     *   1. shift + left click = PASTE
+     *   2. shift + right click = COPY
+     *   3. left click = LOWER PRIORITY
+     *   4. right click = RAISE PRIORITY
+     */
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault() //< Prevent the browser's option menu from displaying after a right click.
         const { min, max, empty } = boxState.config;
-
 
         if (keyboardState.shift) {
             if (e.button === LEFT_CLICK) {

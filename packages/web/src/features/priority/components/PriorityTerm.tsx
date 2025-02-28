@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, cloneElement } from "react";
+import { useEffect, useState } from "react";
 import { useTypeState } from "@/lib/hooks";
 import { usePriorityClipboard, usePriorityContext, EMPTY, PriorityBox, InteractableLabel } from "@/priority";
 import { LEFT_CLICK, RIGHT_CLICK } from "@/constants";
@@ -275,7 +275,6 @@ export function TermPriority({ state, className='' }: TermPriorityProps) {
 
 
 function Block(props: TermBlockProps) {
-    const offset = props.blockIdx * props.weeksPerRow * props.numRoles;
     const numPads = props.weeksPerRow - props.numCols;
     
     return (
