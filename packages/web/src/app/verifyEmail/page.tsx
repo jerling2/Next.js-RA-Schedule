@@ -5,6 +5,8 @@ import { useAuthContext } from "@/auth";
 import { SmallButton } from "@/ui";
 import { useRouter, useSearchParams } from "next/navigation";
 
+// TODO: Rename this to something simple like "Page" and remove complex logic.
+// reasoning: page.tsx in the App Router should not define custom 'one-off' components.
 export default function VerifyEmail() {
     return (
     <Suspense fallback={<div>loading...</div>}>
@@ -13,6 +15,7 @@ export default function VerifyEmail() {
     );
 }
 
+// Move this component to its own subdomain in `features`.
 function VerifyEmailComponent() {
     const router = useRouter();
     const { user } = useAuthContext();

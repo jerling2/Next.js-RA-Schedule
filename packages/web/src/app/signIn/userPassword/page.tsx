@@ -7,7 +7,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 
+
+// TODO: Rename this to something simple like "Page" and remove complex logic.
+// reasoning: page.tsx in the App Router should not define custom 'one-off' components.
 export default function PasswordSignIn () {
+    // ===================================================================== //
+    // TODO: Move this to its own subdomain in `features`.
     const {email} = useEmailContext();
     const [pass, setPass] = useState<string>("");
     const [shake, setShake] = useState<boolean>(false);
@@ -33,6 +38,7 @@ export default function PasswordSignIn () {
             setLoading(false);
         }
     }
+    // ===================================================================== //
 
     return (
         <>

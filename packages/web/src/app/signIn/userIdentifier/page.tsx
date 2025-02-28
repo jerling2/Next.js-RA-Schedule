@@ -5,7 +5,11 @@ import { FieldInput, SmallButton } from '@/ui';
 import { checkUserEmail } from "@/client/auth";
 import { useEmailContext } from '@/auth';
 
+// TODO: Rename this to something simple like "Page" and remove complex logic.
+// reasoning: page.tsx in the App Router should not define custom 'one-off' components.
 export default function EmailSignIn() {
+    // ===================================================================== //
+    // TODO: Move this to its own subdomain in `features`.
     const router = useRouter();
     const {email, setEmail} = useEmailContext();
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -39,6 +43,7 @@ export default function EmailSignIn() {
         router.push('/signIn/userPassword');
       }
     }
+    // ===================================================================== //
 
     return (
       <>

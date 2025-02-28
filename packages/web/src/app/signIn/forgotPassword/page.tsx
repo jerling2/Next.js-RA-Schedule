@@ -8,7 +8,11 @@ import { useState, useEffect } from "react";
 import { FieldInput, SmallButton } from "@/ui";
 import { FirebaseError } from "firebase/app";
 
+// TODO: Rename this to something simple like "Page" and remove complex logic.
+// reasoning: page.tsx in the App Router should not define custom 'one-off' components.
 export default function ForgotPassword () {
+    // ===================================================================== //
+    // TODO: Move this to its own subdomain in `features`.
     const router = useRouter();
     const { email } = useEmailContext();
     const [timeLeft, setTimeLeft] = useState<number>(0);
@@ -129,6 +133,7 @@ export default function ForgotPassword () {
         }
         setLoading(false);
       }
+    // ===================================================================== //
 
     return (
         <div className="relative flex flex-col w-full h-full justify-between place-items-center">

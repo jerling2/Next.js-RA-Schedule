@@ -6,7 +6,10 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/
 import { FirebaseError } from "firebase/app";
 import { FieldInput, SmallButton } from "@/ui";
 
+// TODO: Rename this to something simple like "Page" and remove complex logic.
+// reasoning: page.tsx in the App Router should not define custom 'one-off' components.
 export default function CreateAccount() {
+  // Move this code to its own subdomain in `features`.
   const router = useRouter();
   const emailRegExp = /.+@.+/
   const emailRegExpString = ".+@.+"
