@@ -14,7 +14,7 @@ export const ROLE_TO_PAGE: {
     [Role.USER]: '/user'
 }
 
-export const URL_ERROR: RouteAuthenticator = (pathname, cookies) => (
+export const URL_ERROR: RouteAuthenticator = (_, __) => (
     NextResponse.json(
         {message: 'baseURL is invalid'},
         {status: 500}
