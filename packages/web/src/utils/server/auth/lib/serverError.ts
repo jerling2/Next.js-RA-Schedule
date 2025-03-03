@@ -1,4 +1,4 @@
-export class ServerError extends Error implements ServerError {
+export class ServerError extends Error implements ServerErrorI {
     code: string;
 
     constructor(message: string, code: string) {
@@ -8,7 +8,6 @@ export class ServerError extends Error implements ServerError {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-
 
 export class InvalidAuthToken extends ServerError {
     constructor(message: string) {
@@ -20,5 +19,11 @@ export class InvalidAuthToken extends ServerError {
 export class UndefinedEnvironment extends ServerError {
     constructor(message: string) {
         super(message, 'Environment/Undefined');
+    }
+}
+
+export class InvalidDecodedIdToken extends ServerError {
+    constructor(message: string) {
+        super(message, 'DecodedIdToken/Invalid');
     }
 }

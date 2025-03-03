@@ -1,0 +1,32 @@
+/* The @tailwind decorators enable tailwindcss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+:root {
+  --invalid: rgb(248, 113, 113);
+  --invalid-hover: rgb(252, 165, 165);
+  --focus: rgb(96, 165, 250);
+  --primary: #00fbff;
+  --primary-hover: #5dfcff;
+  --secondary: rgba(45, 54, 180, 1);
+  --secondary-50: rgba(45, 54, 180, 0.50);
+  --secondary-25: rgba(45, 54, 180, 0.25);
+  --accent: rgba(0, 255, 204, 1);
+  --accent-15: rgba(0, 255, 204, .15);
+  --accent-10: rgba(0, 255, 204, .10);
+  --accent-hover: rgba(0, 255, 204, .10);
+  --background-1: #111111;
+  --background-2: #161619;
+  --background-3: #26262b;
+  --background-4: #4e4e4f;
+  --background-5: #656567;
+  --background-6: #797979;
+  --text: #ffffff;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}

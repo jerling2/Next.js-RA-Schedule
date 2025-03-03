@@ -26,9 +26,7 @@
     "rootDir": ".",
     "paths": {
       "@/*": ["src/features/*/index.ts"],
-      "@/lib/hooks": ["src/utils/lib/hooks.ts"],
-      "@/constants": ["src/utils/lib/constants.ts"],
-      "@/server/*": ["src/utils/server/*"],
+      "@/server/*": ["src/utils/server/*/index.ts"],
       "@/client/*": ["src/utils/client/*"],
       "@/public/*": ["public/*"],
     },
