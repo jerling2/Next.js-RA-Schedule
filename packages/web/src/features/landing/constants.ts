@@ -1,0 +1,2 @@
+export const SIGN_IN_BTN_TW = 'bg-primary font-bold text-lg text-background-1 rounded-full w-1/3 aspect-[3/1] cursor-pointer hover:bg-primary-hover transition-all duration-200';
+export const CREATE_ACC_BTN_TW = 'font-bold text-accent text-base mb-7 cursor-pointer hover:bg-accent-10 rounded-full p-2 transition-all duration-200';

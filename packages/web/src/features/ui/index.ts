@@ -1,3 +1,7 @@
+export * from "./components/CenterContent";
+export * from "./components/FancyTitle";
+export * from "./components/SquareContainer";
+export * from "./components/RoutingButton";
 export * from "./components/Accordion"
 export * from "./components/FieldInput"
 export * from "./components/NextButton"

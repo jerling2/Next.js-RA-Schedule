@@ -1,7 +1,9 @@
 "use client";
+import { LandingContent } from "@/landing"; 
+
 
 export default function Page() {
     return (
-        <div>Test</div>
+        <LandingContent />
     );
 }
