@@ -27,8 +27,11 @@
     "paths": {
       "@/*": ["src/features/*/index.ts"],
       "@/server/*": ["src/utils/server/*/index.ts"],
-      "@/client/*": ["src/utils/client/*"],
+      "@/client/*": ["src/utils/client/*/index.ts"],
+      "@/shared/*": ["src/utils/shared/*/index.ts"],
       "@/public/*": ["public/*"],
+      "@/fonts": ["src/fonts/index.ts"],
+      "@/globalCSS": ["src/styles/global.css"]
     },
   },
   "include": [
