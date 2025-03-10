@@ -1,9 +1,9 @@
 "use client";
 import { useEffect } from "react";
-import { LEFT_CLICK, RIGHT_CLICK } from "@/constants";
+import { LEFT_CLICK, RIGHT_CLICK } from "@/shared/system";
 import { useKeyboardContext } from "@/ui"
 import { usePriorityClipboard, usePriorityContext } from "@/priority"
-import { useTypeState } from "@/lib/hooks";
+import { useTypeState } from "@/shared/typeState";
 
 
 export function PriorityBox({ initialState }: PriorityBoxProps) {

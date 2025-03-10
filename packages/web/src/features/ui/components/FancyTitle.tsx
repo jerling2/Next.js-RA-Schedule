@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-export function FancyTitle({title,}: {title: string}) {
-    return (
-        <div className='text-5xl mt-7 font-bold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text'>
-            {title}
-        </div>
-    );
+export function FancyTitle({ title }: { title: string }) {
+  return (
+    <div className="mt-7 pb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-5xl font-bold text-transparent">
+      {title}
+    </div>
+  );
 }

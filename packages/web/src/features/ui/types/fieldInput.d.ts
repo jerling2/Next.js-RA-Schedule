@@ -1,9 +1,15 @@
-interface TextInputProps {
+type FieldInputState = {
     type?: string;
     placeholder?: string;
-    value?: string | undefined;
-    onChange?: (textInput: string) => void;
+    value?: string;
     pattern?: string;
-    disabled?: boolean;
-    invalid?: boolean;
+    isDisabled?: boolean;
+    isValid?: boolean;
+};
+
+type OnChange = (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+interface FieldInputI {
+    state: FieldInputState;
+    onChange: OnChange;
 };

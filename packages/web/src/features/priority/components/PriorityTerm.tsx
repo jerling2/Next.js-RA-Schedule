@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useTypeState } from "@/lib/hooks";
+import { useTypeState } from "@/shared/typeState";
 import { usePriorityClipboard, usePriorityContext, EMPTY, PriorityBox, InteractableLabel } from "@/priority";
-import { LEFT_CLICK, RIGHT_CLICK } from "@/constants";
+import { LEFT_CLICK, RIGHT_CLICK } from "@/shared/system";
 import { useKeyboardContext } from "@/ui";
 
 
