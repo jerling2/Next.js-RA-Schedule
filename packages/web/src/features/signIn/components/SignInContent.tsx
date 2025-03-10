@@ -14,8 +14,9 @@ export function SignInContent() {
             <SquareContainer>
                 <FancyTitle title="Sign In"/>
                 <EmailFieldInput />
-                
-                {/* Some sort of Sign in options bar here */}
+                <div>
+
+                </div>
             </SquareContainer>
         </CenterContent>
     );
